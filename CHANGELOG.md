@@ -3,6 +3,15 @@
 Format inspire de [Keep a Changelog](https://keepachangelog.com/fr/).
 Versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [2.1.0] - 2026-06-25
+### Ajoute / Modifie
+- Identite de marque **Joyeux** (wordmark + point coral signature) sur toute l'app.
+- Refonte visuelle **Festif & Colore** : Accueil (landing), Galerie (filtres + recherche),
+  Editeur (personnalisateur), Deployer - fond creme, primaire coral, Nunito 800.
+- Nouvelle page **Creer par IA** (composeur ; generation a venir / stub).
+- Textes orientes **toutes occasions** (anniversaire, fete des meres/peres, etc.).
+- Pages : `/` Accueil, `/galerie`, `/create` (IA), `/create/<slug>` (editeur), `/deploy`.
+
 ## [2.0.0] - 2026-06-25
 ### Ajoute
 - **Galerie web (Astro)** a la racine : parcourir les modeles avec apercu en direct.

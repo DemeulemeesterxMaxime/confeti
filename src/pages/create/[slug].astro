@@ -8,48 +8,50 @@ export function getStaticPaths() {
 
 const { tpl } = Astro.props;
 ---
-<Base title={`Personnaliser ${tpl.title} - Birthday Website Template`}>
-  <main class="editor">
-    <section class="panel">
-      <a class="back" href="/">&larr; Galerie</a>
-      <h1>Personnaliser</h1>
-      <p class="muted sub">{tpl.title}</p>
-
-      <p class="loading" id="loadingMsg">Chargement du modele...</p>
-
-      <div id="form" hidden>
-        <div class="group">
-          <h2>Textes</h2>
-          <div id="fields"></div>
-        </div>
-
-        <div class="group">
-          <h2>Photos</h2>
-          <p class="muted small">Ajoute une image par emplacement. Elle sera integree au fichier final.</p>
-          <div id="slots" class="slots"></div>
-        </div>
-
-        <div class="group">
-          <h2>Musique (optionnel)</h2>
-          <input type="file" id="music" accept="audio/*" />
-          <p class="muted small" id="musicInfo">Ajoute un mp3 : il demarre a la premiere interaction sur le site. Attention, cela alourdit le fichier.</p>
-        </div>
-
-        <div class="downloadbar">
-          <button class="btn primary" id="dl">Telecharger le site</button>
-          <button class="btn" id="openBig">Apercu plein ecran</button>
-          <p class="muted small" id="sizeNote"></p>
-        </div>
+<Base title={`Personnaliser ${tpl.title} - Joyeux`} active="create">
+  <div class="topbar">
+    <div class="wrap topbar-in">
+      <div class="bread"><a href="/galerie">Galerie</a><span>/</span><b>{tpl.title}</b></div>
+      <div class="acts">
+        <button class="btn soft sm" id="openBig">Aperçu plein écran</button>
+        <button class="btn primary sm" id="dl">⬇ Télécharger le site</button>
       </div>
+    </div>
+  </div>
+
+  <div class="wrap ed-grid">
+    <section class="preview-col">
+      <div class="eyebrow">Aperçu en direct</div>
+      <div class="device"><iframe id="preview" title="Aperçu en direct"></iframe></div>
+      <p class="muted small center">Téléphone · ordinateur · mise à jour en temps réel</p>
     </section>
 
-    <aside class="previewpane">
-      <div class="device">
-        <iframe id="preview" title="Apercu en direct"></iframe>
+    <aside class="panel card">
+      <div class="panel-h">
+        <h2>Réglages</h2>
+        <a class="pill coral" href="/create" title="Bientôt">✨ Réécrire par IA</a>
       </div>
-      <p class="muted center small">Apercu en direct</p>
+
+      <p class="loading" id="loadingMsg">Chargement du modèle…</p>
+
+      <div id="form" hidden>
+        <div class="sec"><div class="sec-t">Textes</div><div id="fields"></div></div>
+        <div class="sec">
+          <div class="sec-t">Photos</div>
+          <p class="muted small">Une image par emplacement, intégrée au fichier final.</p>
+          <div id="slots" class="slots"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-t">Musique (optionnel)</div>
+          <input type="file" id="music" accept="audio/*" />
+          <p class="muted small" id="musicInfo">Démarre à la première interaction (contrainte iOS). Alourdit le fichier.</p>
+        </div>
+        <button class="btn primary big" id="dl2">⬇ Télécharger le site</button>
+        <p class="muted small center" id="sizeNote"></p>
+        <p class="muted small center">Un seul fichier .html · photos & musique intégrées</p>
+      </div>
     </aside>
-  </main>
+  </div>
 </Base>
 
 <script define:vars={{ tplUrl: tpl.url }}>
@@ -62,21 +64,21 @@ const { tpl } = Astro.props;
   const sizeNote = $('#sizeNote');
 
   let baseDoc = null;
-  const edits = {};     // key -> texte
-  const images = {};    // slot -> dataURL
+  const edits = {};
+  const images = {};
   let musicDataUrl = null;
 
   function labelFor(key) {
-    if (key === 'name') return 'Prenom';
+    if (key === 'name') return 'Prénom';
     if (key === 'opening.eyebrow') return 'Ouverture : sur-titre';
     if (key === 'opening.title') return 'Ouverture : titre';
     if (key === 'finale.eyebrow') return 'Finale : sur-titre';
     if (key === 'finale.title') return 'Finale : titre';
     if (key === 'finale.sub') return 'Finale : sous-titre';
     let m = key.match(/^s(\d+)\.kicker$/);
-    if (m) return 'Scene ' + m[1] + ' : etiquette';
+    if (m) return 'Scène ' + m[1] + ' : étiquette';
     m = key.match(/^s(\d+)\.line$/);
-    if (m) return 'Scene ' + m[1] + ' : message';
+    if (m) return 'Scène ' + m[1] + ' : message';
     return key;
   }
   const isLong = (key) => /\.line$/.test(key);
@@ -91,13 +93,18 @@ const { tpl } = Astro.props;
       formEl.hidden = false;
       render();
     } catch (e) {
-      loadingEl.textContent = 'Impossible de charger le modele : ' + e;
+      loadingEl.textContent = 'Impossible de charger le modèle : ' + e;
     }
   }
 
   function buildForm() {
-    // --- Textes ---
-    baseDoc.querySelectorAll('[data-edit]').forEach((el) => {
+    const editEls = Array.prototype.slice.call(baseDoc.querySelectorAll('[data-edit]'));
+    editEls.sort((a, b) => {
+      if (a.getAttribute('data-edit') === 'name') return -1;
+      if (b.getAttribute('data-edit') === 'name') return 1;
+      return 0;
+    });
+    editEls.forEach((el) => {
       const key = el.getAttribute('data-edit');
       edits[key] = (el.textContent || '').trim();
       const wrap = document.createElement('label');
@@ -113,16 +120,14 @@ const { tpl } = Astro.props;
       fieldsEl.appendChild(wrap);
     });
 
-    // --- Photos ---
-    const slotEls = [...baseDoc.querySelectorAll('[data-slot]')];
-    if (!slotEls.length) $('#slots').previousElementSibling.textContent = 'Ce modele n’a pas d’emplacement photo.';
+    const slotEls = Array.prototype.slice.call(baseDoc.querySelectorAll('[data-slot]'));
     slotEls.forEach((el) => {
       const n = el.getAttribute('data-slot');
       const cell = document.createElement('div');
       cell.className = 'slot';
       const thumb = document.createElement('div');
       thumb.className = 'thumb';
-      thumb.textContent = 'Photo ' + n;
+      thumb.textContent = n;
       const file = document.createElement('input');
       file.type = 'file';
       file.accept = 'image/*';
@@ -132,7 +137,7 @@ const { tpl } = Astro.props;
         const r = new FileReader();
         r.onload = () => {
           images[n] = r.result;
-          thumb.style.backgroundImage = 'url("' + r.result + '")';
+          thumb.style.backgroundImage = 'url(' + r.result + ')';
           thumb.textContent = '';
           scheduleRender();
         };
@@ -143,7 +148,6 @@ const { tpl } = Astro.props;
       slotsEl.appendChild(cell);
     });
 
-    // --- Musique ---
     $('#music').addEventListener('change', (e) => {
       const f = e.target.files && e.target.files[0];
       if (!f) return;
@@ -153,6 +157,7 @@ const { tpl } = Astro.props;
     });
 
     $('#dl').addEventListener('click', download);
+    $('#dl2').addEventListener('click', download);
     $('#openBig').addEventListener('click', openBig);
   }
 
@@ -171,8 +176,6 @@ const { tpl } = Astro.props;
       if (images[n]) {
         el.textContent = '';
         el.style.background = 'center / cover no-repeat #11131a';
-        // Le CSSOM normalise en url("..."), serialise en &quot; dans l'attribut style :
-        // c'est l'echappement HTML correct (revient a url("...") au re-parsing).
         el.style.backgroundImage = 'url(' + images[n] + ')';
       }
     });
@@ -192,15 +195,15 @@ const { tpl } = Astro.props;
     const html = serialize(buildDoc());
     previewEl.srcdoc = html;
     const mo = new Blob([html]).size / 1e6;
-    sizeNote.textContent = 'Fichier estime : ' + mo.toFixed(mo < 1 ? 2 : 1) + ' Mo'
+    sizeNote.textContent = 'Fichier estimé : ' + mo.toFixed(mo < 1 ? 2 : 1) + ' Mo'
       + (musicDataUrl ? ' (musique incluse)' : '');
   }
 
   function fileName() {
-    const base = (edits['name'] || 'anniversaire').toLowerCase()
+    const base = (edits['name'] || 'joyeux').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g, '')
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return (base || 'anniversaire') + '.html';
+    return 'joyeux-' + (base || 'fete') + '.html';
   }
 
   function download() {
@@ -223,40 +226,49 @@ const { tpl } = Astro.props;
 </script>
 
 <style>
-  .editor { display:grid; grid-template-columns:minmax(0,1fr) 420px; gap:30px; align-items:start; padding:10px 0 20px; }
-  .back { display:inline-block; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:8px; }
-  .back:hover { color:#fff; }
-  .panel h1 { font-size:34px; margin:0; }
-  .sub { margin:2px 0 18px; }
-  .loading { color:var(--muted); }
+  .topbar { background:var(--surface); border-bottom:1px solid var(--line); position:sticky; top:62px; z-index:30; }
+  .topbar-in { display:flex; align-items:center; justify-content:space-between; gap:14px; height:58px; }
+  .bread { display:flex; align-items:center; gap:10px; font-weight:700; font-size:13px; color:var(--faint); }
+  .bread a:hover { color:var(--ink); }
+  .bread b { color:var(--ink); }
+  .acts { display:flex; gap:10px; }
 
-  .group { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; margin-bottom:18px; }
-  .group h2 { font-size:19px; margin:0 0 12px; }
-  .small { font-size:13px; }
-
-  .field { display:block; margin-bottom:12px; }
-  .field span { display:block; font-size:12px; letter-spacing:.04em; color:var(--gold); margin-bottom:5px; }
-  .field input, .field textarea { width:100%; background:rgba(7,13,34,.6); border:1px solid var(--line); border-radius:9px; color:var(--text); padding:9px 11px; font:inherit; font-size:14px; resize:vertical; }
-  .field input:focus, .field textarea:focus { outline:none; border-color:var(--accent); }
-
-  .slots { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:12px; }
-  .slot { display:flex; flex-direction:column; gap:6px; }
-  .thumb { aspect-ratio:3/4; border-radius:9px; background:repeating-linear-gradient(45deg,#1a2238,#1a2238 12px,#212a44 12px,#212a44 24px) center/cover no-repeat; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; }
-  .slot input[type=file] { font-size:11px; color:var(--muted); }
-
-  #music { color:var(--muted); font-size:13px; }
-
-  .downloadbar { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-  .downloadbar .small { width:100%; margin:2px 0 0; }
-
-  .previewpane { position:sticky; top:16px; }
-  .device { border:1px solid var(--line); border-radius:22px; overflow:hidden; background:#0a1430; box-shadow:0 30px 70px rgba(0,0,0,.5); }
-  .device iframe { display:block; width:100%; height:720px; border:0; background:#0a1430; }
+  .ed-grid { display:grid; grid-template-columns:minmax(0,1fr) 410px; gap:28px; padding:24px; align-items:start; }
+  .preview-col { position:sticky; top:140px; }
+  .eyebrow { font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-bottom:12px; }
+  .device { border-radius:22px; overflow:hidden; background:#0a1430; border:1px solid var(--line); box-shadow:0 26px 54px rgba(120,90,60,.16); padding:9px; }
+  .device iframe { display:block; width:100%; height:660px; border:0; border-radius:16px; background:#0a1430; }
   .center { text-align:center; }
+  .small { font-size:12px; }
+  .muted { color:var(--faint); }
 
-  @media (max-width: 900px) {
-    .editor { grid-template-columns:1fr; }
-    .previewpane { position:static; order:-1; }
-    .device iframe { height:540px; }
+  .panel { padding:22px; }
+  .panel-h { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .panel-h h2 { font-size:16px; font-weight:800; margin:0; }
+  .panel-h .pill { text-decoration:none; }
+  .loading { color:var(--faint); }
+
+  .sec { padding:14px 0; border-top:1px solid var(--line); }
+  .sec:first-of-type { border-top:0; padding-top:0; }
+  .sec-t { font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+
+  .field { display:block; margin-bottom:10px; }
+  .field span { display:block; font-weight:700; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--coral); margin-bottom:5px; }
+  .field input, .field textarea { width:100%; background:var(--cream); border:1.5px solid var(--line); border-radius:10px; color:var(--ink); padding:10px 12px; font:inherit; font-size:14px; resize:vertical; }
+  .field input:focus, .field textarea:focus { outline:none; border-color:var(--coral); }
+
+  .slots { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .slot { display:flex; flex-direction:column; gap:5px; }
+  .thumb { aspect-ratio:3/4; border-radius:9px; background:repeating-linear-gradient(45deg,#ece9df,#ece9df 7px,#e4e0d3 7px,#e4e0d3 14px) center/cover no-repeat; display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:12px; font-weight:800; }
+  .slot input[type=file] { font-size:10px; color:var(--faint); width:100%; }
+
+  #music { color:var(--faint); font-size:13px; }
+  .btn.big { width:100%; padding:14px; margin-top:8px; }
+
+  @media (max-width:900px) {
+    .ed-grid { grid-template-columns:1fr; }
+    .preview-col { position:static; order:-1; }
+    .device iframe { height:520px; }
+    .topbar { position:static; }
   }
 </style>

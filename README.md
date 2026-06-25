@@ -1,4 +1,7 @@
-# 🎂 Birthday Website Template - galerie + personnalisateur de sites d'anniversaire
+# 🎂 Joyeux - galerie + personnalisateur de sites de fete (toutes occasions)
+
+> Marque **Joyeux** (point coral en signature). Anniversaire, fete des meres/peres,
+> felicitations... un site qui se raconte au scroll, a personnaliser et offrir.
 
 > **EN - TL;DR**: An open-source gallery of single-file, scroll-driven birthday
 > websites. Browse a template, add your photos / texts / music right in the browser,

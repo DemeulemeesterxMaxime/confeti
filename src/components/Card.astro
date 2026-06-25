@@ -1,0 +1,35 @@
+---
+const { t } = Astro.props;
+---
+<article class="tcard" data-cat={t.category} data-name={(t.title + ' ' + t.description).toLowerCase()}>
+  <a class="prev" href={t.editUrl} aria-label={`Personnaliser ${t.title}`}>
+    <iframe src={t.url} width="1280" height="832" loading="lazy" scrolling="no" tabindex="-1" title={`Aperçu ${t.title}`}></iframe>
+    <span class="hover">Personnaliser</span>
+  </a>
+  <div class="row">
+    <span class="dot" style={`background:${t.accent}`}></span>
+    <h3>{t.title}</h3>
+    {t.hasMusic && <span class="mus" title="Musique incluse">♪</span>}
+  </div>
+  <div class="by">par {t.author}</div>
+  <div class="act">
+    <a class="btn primary sm grow" href={t.editUrl}>Personnaliser</a>
+    <a class="btn soft sm" href={t.url} target="_blank" rel="noopener">Aperçu</a>
+  </div>
+</article>
+
+<style>
+  .tcard { background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:13px; box-shadow:var(--shadow); transition:transform .16s, border-color .16s; }
+  .tcard:hover { transform:translateY(-4px); border-color:var(--coral); }
+  .prev { display:block; position:relative; width:100%; overflow:hidden; border-radius:13px; background:#0a1430; }
+  .prev iframe { position:absolute; top:0; left:0; border:0; transform-origin:top left; pointer-events:none; }
+  .prev .hover { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; opacity:0; background:rgba(8,18,44,0); transition:opacity .16s, background .16s; }
+  .tcard:hover .prev .hover { opacity:1; background:rgba(8,18,44,.5); }
+  .row { display:flex; align-items:center; gap:8px; margin-top:12px; }
+  .row .dot { width:9px; height:9px; border-radius:50%; flex:none; }
+  .row h3 { font-size:15px; font-weight:800; margin:0; }
+  .row .mus { margin-left:auto; color:var(--coral); font-size:13px; }
+  .by { font-size:12px; font-weight:500; color:var(--faint); margin-top:3px; }
+  .act { display:flex; gap:8px; margin-top:13px; }
+  .act .grow { flex:1; }
+</style>

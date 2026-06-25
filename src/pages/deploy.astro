@@ -3,69 +3,79 @@ import Base from '../layouts/Base.astro';
 const repo = 'https://github.com/DemeulemeesterxMaxime/birthday-website-template';
 const deployBtn = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(repo)}`;
 ---
-<Base title="Heberger ton site - Birthday Website Template">
-  <section class="head">
-    <p class="eyebrow">Mettre en ligne</p>
-    <h1>Heberge ton site en 2 minutes</h1>
-    <p class="sub">Une fois ton fichier personnalise telecharge, tu as juste besoin de le mettre en ligne pour obtenir un lien a partager.</p>
+<Base title="Héberger ton site - Joyeux" active="deploy">
+  <section class="wrap head">
+    <span class="pill green">🚀 Dernière étape</span>
+    <h1>Mets ton site en ligne en 2 minutes</h1>
+    <p>Tu as téléchargé ton fichier <code>.html</code>. Choisis comment le mettre en ligne et obtiens un lien à partager.</p>
   </section>
 
-  <div class="cols">
-    <section class="col">
-      <h2>Option A - Le plus simple (Netlify Drop)</h2>
-      <ol>
-        <li>Mets ton <code>index.html</code> telecharge (et ton <code>music.mp3</code> si separe) dans un dossier.</li>
-        <li>Va sur <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">app.netlify.com/drop</a>.</li>
-        <li>Glisse-depose le dossier. Tu obtiens une URL instantanement.</li>
+  <section class="wrap cols">
+    <div class="card pad">
+      <div class="ct"><h2>Netlify Drop</h2><span class="pill green">Le plus simple</span></div>
+      <p class="muted">Glisse ton fichier, reçois une URL immédiate. Aucun compte requis.</p>
+      <a class="drop" href="https://app.netlify.com/drop" target="_blank" rel="noopener">
+        <div class="drop-t">⬆ Ouvrir Netlify Drop</div>
+        <div class="drop-d">puis glisse ton fichier .html</div>
+      </a>
+      <ol class="steps green">
+        <li><span>1</span> Va sur <b>app.netlify.com/drop</b></li>
+        <li><span>2</span> Dépose ton fichier</li>
+        <li><span>3</span> Copie l'URL et partage 🎉</li>
       </ol>
-      <p class="note">Aucune installation, aucun compte obligatoire pour l'essai.</p>
-    </section>
+    </div>
 
-    <section class="col">
-      <h2>Option B - Vercel (URL stable + auto-deploy)</h2>
-      <ol>
-        <li>Mets ton fichier dans un depot <strong>GitHub</strong> (meme prive).</li>
-        <li>Va sur <a href="https://vercel.com/new" target="_blank" rel="noopener">vercel.com/new</a>, connecte-toi avec GitHub.</li>
-        <li>Importe le depot. Framework Preset = <strong>Other</strong>, aucune commande de build.</li>
-        <li><strong>Deploy</strong> : tu obtiens une URL <code>*.vercel.app</code>. A chaque push, ca se redeploie tout seul.</li>
+    <div class="card pad">
+      <div class="ct"><h2>Vercel</h2><span class="pill blue">URL stable</span></div>
+      <p class="muted">Une adresse permanente qui se met à jour à chaque modification.</p>
+      <a class="btn dark big" href={deployBtn} target="_blank" rel="noopener">▲ Deploy to Vercel</a>
+      <ol class="steps blue">
+        <li><span>1</span> Mets le fichier dans un dépôt GitHub</li>
+        <li><span>2</span> Importe sur <b>vercel.com/new</b></li>
+        <li><span>3</span> Framework « Other » → Deploy 🚀</li>
       </ol>
-      <a class="btn primary" href={deployBtn} target="_blank" rel="noopener">Deploy to Vercel</a>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <section class="add">
-    <h2>Ajouter un modele au projet</h2>
-    <p>
-      Tu veux proposer ton propre modele dans cette galerie ? Cree un dossier dans
-      <code>public/templates/&lt;ton-modele&gt;/</code> contenant :
-    </p>
-    <ul>
-      <li><code>index.html</code> - ton site autonome (requis).</li>
-      <li><code>meta.json</code> - <code>{`{ "title": "...", "description": "...", "author": "...", "accent": "#9cc0ff" }`}</code> (optionnel).</li>
-      <li><code>music.mp3</code> - musique de fond (optionnel).</li>
-    </ul>
-    <p>
-      Pour qu'il soit personnalisable ici, marque les photos avec <code>data-slot="1..N"</code>
-      et les textes avec <code>data-edit="cle"</code>. Details dans
-      <a href={`${repo}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener">CONTRIBUTING.md</a>
-      et <a href={`${repo}/blob/main/AGENT.md`} target="_blank" rel="noopener">AGENT.md</a>.
-      Les contributions se font dans des branches (<code>main</code> reste figee).
+  <p class="wrap tip">💡 Le fichier fonctionne aussi hors-ligne - tu peux simplement l'envoyer par message.</p>
+
+  <section class="wrap add">
+    <h3>Ajouter un modèle au projet</h3>
+    <p class="muted">
+      Dépose un dossier dans <code>public/templates/&lt;slug&gt;/</code> (avec
+      <code>index.html</code>, et au choix <code>meta.json</code> / <code>music.mp3</code>),
+      marque les photos <code>data-slot</code> et les textes <code>data-edit</code>. Détails :
+      <a href={`${repo}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener">CONTRIBUTING.md</a>.
+      Les contributions se font dans des branches (<code>main</code> reste figée).
     </p>
   </section>
 </Base>
 
 <style>
-  .head { text-align:center; padding:40px 0 18px; }
-  .eyebrow { letter-spacing:.32em; text-transform:uppercase; font-size:12px; color:var(--gold); margin:0 0 12px; }
-  .head h1 { font-size:clamp(30px,5vw,52px); margin:0 0 14px; }
-  .head .sub { max-width:620px; margin:0 auto; color:var(--muted); font-size:17px; line-height:1.6; }
-  .cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:22px; margin:26px 0; }
-  .col, .add { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 24px; }
-  .col h2, .add h2 { font-size:21px; margin:0 0 12px; }
-  ol, ul { color:var(--muted); line-height:1.7; padding-left:20px; margin:0 0 14px; }
-  li { margin:6px 0; }
-  code { background:rgba(156,192,255,.12); padding:2px 7px; border-radius:6px; font-size:.92em; color:#dce8ff; }
-  a { color:var(--accent); }
-  .note { color:var(--muted); font-size:13px; margin:0; }
-  .add { margin-bottom:10px; }
+  .head { text-align:center; padding:42px 24px 20px; }
+  .head h1 { font-size:clamp(30px,4.6vw,42px); font-weight:800; letter-spacing:-.02em; margin:16px 0 10px; }
+  .head p { color:var(--muted); max-width:620px; margin:0 auto; font-size:16px; }
+  code { background:var(--cream2); padding:2px 7px; border-radius:6px; font-size:.9em; color:var(--ink); }
+
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .pad { padding:28px; }
+  .ct { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .ct h2 { font-size:20px; font-weight:800; margin:0; }
+  .muted { color:var(--muted); font-size:14px; }
+  .drop { display:block; text-align:center; border-radius:14px; border:2px dashed var(--green); background:#f4fbf7; padding:24px; margin:8px 0 4px; }
+  .drop-t { font-weight:800; }
+  .drop-d { color:var(--faint); font-size:13px; margin-top:5px; }
+  .btn.big { width:100%; padding:16px; margin:8px 0 4px; }
+  .steps { list-style:none; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:10px; }
+  .steps li { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; }
+  .steps li span { width:24px; height:24px; border-radius:50%; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex:none; }
+  .steps.green li span { background:var(--green); }
+  .steps.blue li span { background:var(--blue); }
+  .steps b { color:var(--ink); }
+  .tip { text-align:center; color:var(--faint); font-size:13px; padding:24px; }
+  .add { padding:6px 24px 10px; }
+  .add h3 { font-size:18px; font-weight:800; margin:0 0 6px; }
+  .add a { color:var(--coral); font-weight:700; }
+
+  @media (max-width:760px) { .cols { grid-template-columns:1fr; } }
 </style>
