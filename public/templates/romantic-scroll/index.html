@@ -63,9 +63,9 @@
         <div style="position:absolute;top:86px;right:31px;width:16px;height:10px;border-radius:50%;background:rgba(140,180,255,0.6);"></div>
         <div style="position:absolute;top:80px;left:50%;transform:translateX(-50%);width:14px;height:9px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#24262c;"></div>
       </div>
-      <div style="font-family:'Nunito',sans-serif;letter-spacing:0.42em;text-transform:uppercase;font-size:clamp(11px,1.4vw,14px);color:#e7c89c;margin-top:36px;">Aujourd'hui, c'est ton jour</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(26px,4.4vw,54px);color:#dce8ff;margin-top:10px;">Joyeux anniversaire</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(72px,15vw,196px);line-height:0.9;color:#fff;margin-top:2px;text-shadow:0 0 46px rgba(140,180,255,0.45);">Julia</div>
+      <div style="font-family:'Nunito',sans-serif;letter-spacing:0.42em;text-transform:uppercase;font-size:clamp(11px,1.4vw,14px);color:#e7c89c;margin-top:36px;" data-edit="opening.eyebrow">Aujourd'hui, c'est ton jour</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(26px,4.4vw,54px);color:#dce8ff;margin-top:10px;" data-edit="opening.title">Joyeux anniversaire</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(72px,15vw,196px);line-height:0.9;color:#fff;margin-top:2px;text-shadow:0 0 46px rgba(140,180,255,0.45);" data-edit="name">Julia</div>
       <div data-cue style="position:absolute;bottom:5vh;font-family:'Nunito',sans-serif;font-size:12px;letter-spacing:0.22em;color:rgba(207,224,255,0.82);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;">Défile pour ouvrir<span style="font-size:20px;animation:bob 1.8s ease-in-out infinite;">↓</span></div>
     </div>
 
@@ -73,11 +73,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div data-depth="1.5" data-rot="-3" class="frame" style="transform:rotate(-3deg);">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="1" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
         <div style="flex:1;min-width:260px;max-width:420px;">
-          <div class="kicker">Le tout début</div>
-          <div class="line">Le jour où je t'ai rencontrée, le monde est devenu un peu plus doux.</div>
+          <div class="kicker" data-edit="s1.kicker">Le tout début</div>
+          <div class="line" data-edit="s1.line">Le jour où je t'ai rencontrée, le monde est devenu un peu plus doux.</div>
         </div>
       </div>
     </div>
@@ -86,11 +86,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div style="flex:1;min-width:260px;max-width:430px;order:1;">
-          <div class="kicker">Mon petit panda</div>
-          <div class="line">Tu es mon petit panda : maladroite, toute câline, et terriblement mignonne.</div>
+          <div class="kicker" data-edit="s2.kicker">Mon petit panda</div>
+          <div class="line" data-edit="s2.line">Tu es mon petit panda : maladroite, toute câline, et terriblement mignonne.</div>
         </div>
         <div data-depth="1.5" data-rot="3" class="frame" style="transform:rotate(3deg);order:2;">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="2" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
       </div>
     </div>
@@ -98,11 +98,11 @@
     <!-- 3 · photo centrée + texte dessous -->
     <div data-scene style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;text-align:center;">
       <div data-depth="1.3" data-rot="-2" class="frame lg" style="transform:rotate(-2deg);">
-        <div class="photo-ph" style="width:clamp(260px,32vw,400px);height:clamp(300px,36vw,460px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+        <div class="photo-ph" data-slot="3" style="width:clamp(260px,32vw,400px);height:clamp(300px,36vw,460px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
       </div>
       <div style="max-width:680px;margin-top:30px;">
-        <div class="kicker" style="margin-bottom:16px;">Adorable</div>
-        <div class="line" style="font-size:clamp(30px,4vw,50px);">Même quand tu te cognes un peu partout, je trouve ça adorable.</div>
+        <div class="kicker" data-edit="s3.kicker" style="margin-bottom:16px;">Adorable</div>
+        <div class="line" data-edit="s3.line" style="font-size:clamp(30px,4vw,50px);">Même quand tu te cognes un peu partout, je trouve ça adorable.</div>
       </div>
     </div>
 
@@ -110,11 +110,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div data-depth="1.5" data-rot="2" class="frame" style="transform:rotate(2deg);">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="4" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
         <div style="flex:1;min-width:260px;max-width:420px;">
-          <div class="kicker">Ton rire</div>
-          <div class="line">Ton rire est, de loin, ma chanson préférée.</div>
+          <div class="kicker" data-edit="s4.kicker">Ton rire</div>
+          <div class="line" data-edit="s4.line">Ton rire est, de loin, ma chanson préférée.</div>
         </div>
       </div>
     </div>
@@ -123,11 +123,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div style="flex:1;min-width:260px;max-width:420px;order:1;">
-          <div class="kicker">Bleu ciel</div>
-          <div class="line">Avec toi, même les jours gris deviennent bleu ciel.</div>
+          <div class="kicker" data-edit="s5.kicker">Bleu ciel</div>
+          <div class="line" data-edit="s5.line">Avec toi, même les jours gris deviennent bleu ciel.</div>
         </div>
         <div data-depth="1.5" data-rot="-3" class="frame" style="transform:rotate(-3deg);order:2;">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="5" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
       </div>
     </div>
@@ -135,11 +135,11 @@
     <!-- 6 · photo centrée + texte dessous -->
     <div data-scene style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;text-align:center;">
       <div data-depth="1.3" data-rot="2" class="frame lg" style="transform:rotate(2deg);">
-        <div class="photo-ph" style="width:clamp(260px,32vw,400px);height:clamp(300px,36vw,460px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+        <div class="photo-ph" data-slot="6" style="width:clamp(260px,32vw,400px);height:clamp(300px,36vw,460px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
       </div>
       <div style="max-width:680px;margin-top:30px;">
-        <div class="kicker" style="margin-bottom:16px;">Toi</div>
-        <div class="line" style="font-size:clamp(30px,4vw,50px);">J'aime chaque petite chose qui fait que tu es toi.</div>
+        <div class="kicker" data-edit="s6.kicker" style="margin-bottom:16px;">Toi</div>
+        <div class="line" data-edit="s6.line" style="font-size:clamp(30px,4vw,50px);">J'aime chaque petite chose qui fait que tu es toi.</div>
       </div>
     </div>
 
@@ -147,11 +147,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div data-depth="1.5" data-rot="-2" class="frame" style="transform:rotate(-2deg);">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="7" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
         <div style="flex:1;min-width:260px;max-width:420px;">
-          <div class="kicker">Matin &amp; soir</div>
-          <div class="line">Tu es ma première pensée du matin et la dernière du soir.</div>
+          <div class="kicker" data-edit="s7.kicker">Matin &amp; soir</div>
+          <div class="line" data-edit="s7.line">Tu es ma première pensée du matin et la dernière du soir.</div>
         </div>
       </div>
     </div>
@@ -160,11 +160,11 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div style="flex:1;min-width:260px;max-width:430px;order:1;">
-          <div class="kicker">Aujourd'hui</div>
-          <div class="line">Aujourd'hui, on te fête toi, la plus belle chose qui me soit arrivée.</div>
+          <div class="kicker" data-edit="s8.kicker">Aujourd'hui</div>
+          <div class="line" data-edit="s8.line">Aujourd'hui, on te fête toi, la plus belle chose qui me soit arrivée.</div>
         </div>
         <div data-depth="1.5" data-rot="3" class="frame" style="transform:rotate(3deg);order:2;">
-          <div class="photo-ph" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
+          <div class="photo-ph" data-slot="8" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
         </div>
       </div>
     </div>
@@ -184,9 +184,9 @@
         <div style="position:absolute;top:60px;right:21px;width:12px;height:7px;border-radius:50%;background:rgba(140,180,255,0.6);"></div>
         <div style="position:absolute;top:56px;left:50%;transform:translateX(-50%);width:10px;height:7px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#24262c;"></div>
       </div>
-      <div style="font-family:'Nunito',sans-serif;letter-spacing:0.4em;text-transform:uppercase;font-size:clamp(11px,1.4vw,14px);color:#e7c89c;margin-top:30px;">Pour toi, aujourd'hui et toujours</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(76px,16vw,210px);line-height:0.92;color:#fff;margin-top:6px;text-shadow:0 0 50px rgba(140,180,255,0.5);">Je t'aime</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(22px,3vw,38px);color:#cfe0ff;margin-top:14px;">avec tout mon cœur</div>
+      <div style="font-family:'Nunito',sans-serif;letter-spacing:0.4em;text-transform:uppercase;font-size:clamp(11px,1.4vw,14px);color:#e7c89c;margin-top:30px;" data-edit="finale.eyebrow">Pour toi, aujourd'hui et toujours</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(76px,16vw,210px);line-height:0.92;color:#fff;margin-top:6px;text-shadow:0 0 50px rgba(140,180,255,0.5);" data-edit="finale.title">Je t'aime</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(22px,3vw,38px);color:#cfe0ff;margin-top:14px;" data-edit="finale.sub">avec tout mon cœur</div>
     </div>
 
   </div>

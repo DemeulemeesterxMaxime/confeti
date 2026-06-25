@@ -1,43 +1,37 @@
 # CLAUDE.md - repères pour Claude Code
 
-Projet : **site d'anniversaire en un seul fichier** (`index.html`), sans build ni
-dépendance. Le guide complet (carte du contenu, photos, musique, règles) est dans
-**[`AGENT.md`](AGENT.md)** - lis-le en premier. Ce fichier ajoute les points utiles
-spécifiquement à Claude Code.
+Projet en deux parties : une **galerie Astro** (`src/`) et des **modeles autonomes
+"un seul fichier"** dans `public/templates/<slug>/index.html`. Le guide complet est
+dans **[`AGENT.md`](AGENT.md)** - lis-le en premier. Ici, les points utiles a Claude Code.
 
-## L'essentiel
-- **Tout est dans `index.html`.** Pas de framework, pas de `npm install`.
-- Pour personnaliser : change le prénom (`Julia`), réécris les `class="line"`, insère
-  les photos dans les 8 cadres `class="photo-ph"`, ajoute `music.mp3`. Détails et
-  carte du contenu : `AGENT.md`.
-- Réponds et commente **en français**, le contenu du site est en français.
+## Structure & commandes
+- `public/templates/<slug>/` : les modeles (HTML autonome + `meta.json` + `music.mp3` optionnels).
+- `src/pages/index.astro` : galerie. `src/pages/create/[slug].astro` : personnalisateur (JS client).
+- `src/lib/templates.js` : scan du dossier templates au build (`fs`).
+- Commandes : `npm install`, `npm run dev` (port 4321), `npm run build` (sortie `dist/`).
+- Réponds et commente **en français**.
 
-## Règles à respecter (ne pas casser le scroll iOS)
+## Personnaliser un modele
+Tout est dans `public/templates/<slug>/index.html`. Textes marques `data-edit="cle"`,
+photos marquees `data-slot="N"`. Edite par chaines exactes (Edit). Si le fichier
+contient des photos base64 volumineuses, passe par un script (Python) plutot que par
+le contexte. Carte du contenu : `AGENT.md`.
+
+## Règles a respecter (ne pas casser le scroll iOS)
 - Ne remets jamais `overflow-x:hidden` sur `body` (garder `overflow-x:clip`).
-- Ne touche pas à `VH` / `layout()` / `update()` / `data-spacer`, ni au
-  `viewport-fit=cover`, ni aux `env(safe-area-inset-*)`, ni à
-  `-webkit-backdrop-filter`, ni au bloc `prefers-reduced-motion`.
-- Garde les messages courts (~1 phrase, < ~90 caractères) pour ne pas déborder en
-  mobile (tailles en `clamp`).
-
-## Modifier le texte - méthode
-Utilise **Edit** avec des chaînes exactes (repère l'étiquette `class="kicker"` puis le
-`class="line"` adjacent). Le fichier peut être lourd s'il contient des photos base64 :
-édite par chaînes ciblées, **n'essaie pas de tout réécrire**. Pour insérer/convertir
-des images base64 volumineuses, passe par un petit script (ex. Python) plutôt que par
-le contexte.
+- Ne touche pas a `VH` / `layout()` / `update()` / `data-spacer`, ni a
+  `viewport-fit=cover`, `env(safe-area-inset-*)`, `-webkit-backdrop-filter`,
+  `@media (prefers-reduced-motion: reduce)`.
+- Messages courts (~1 phrase, < ~90 caracteres) pour ne pas deborder en mobile (`clamp`).
 
 ## Vérifier
-- Lance un serveur statique simple et ouvre la page (ex. config `Claude_Preview` avec
-  `python -m http.server`).
-- ⚠️ Certains navigateurs « headless » de preview **ne peignent pas** : les captures
-  d'écran peuvent expirer et `requestAnimationFrame` ne se déclenche pas (donc les
-  transitions de scroll ne s'observent pas, et `update()` ne se relance pas au scroll).
-  Dans ce cas, **vérifie par inspection DOM / styles calculés** (nombre de scènes,
-  géométrie via `getBoundingClientRect`, images chargées) au lieu de conclure à un bug.
-- Pour de vrai, le rendu et le scroll se valident dans un navigateur réel (idéalement
-  Safari iOS).
+- `npm run dev` + ouvrir la galerie (config `Claude_Preview`, port 4321).
+- ⚠️ Le navigateur de preview headless **ne peint pas** : captures qui expirent,
+  `requestAnimationFrame` qui ne se declenche pas. Verifie par inspection DOM / styles
+  calcules / re-parsing du HTML genere plutot que par capture.
+- Pour le personnalisateur, un input file se teste via `DataTransfer` (set `input.files`
+  puis dispatch `change`), et la sortie via re-parsing du `srcdoc` de l'apercu.
 
 ## Contribution
-`main` n'accepte **aucun merge**. Les variantes se font dans des **branches**
-(voir `CONTRIBUTING.md`). Ne crée pas de PR vers `main`.
+`main` n'accepte **aucun merge**. Variantes dans des branches `template/...`
+(voir `CONTRIBUTING.md`).

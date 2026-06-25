@@ -1,0 +1,262 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getTemplates } from '../../lib/templates.js';
+
+export function getStaticPaths() {
+  return getTemplates().map((t) => ({ params: { slug: t.slug }, props: { tpl: t } }));
+}
+
+const { tpl } = Astro.props;
+---
+<Base title={`Personnaliser ${tpl.title} - Birthday Website Template`}>
+  <main class="editor">
+    <section class="panel">
+      <a class="back" href="/">&larr; Galerie</a>
+      <h1>Personnaliser</h1>
+      <p class="muted sub">{tpl.title}</p>
+
+      <p class="loading" id="loadingMsg">Chargement du modele...</p>
+
+      <div id="form" hidden>
+        <div class="group">
+          <h2>Textes</h2>
+          <div id="fields"></div>
+        </div>
+
+        <div class="group">
+          <h2>Photos</h2>
+          <p class="muted small">Ajoute une image par emplacement. Elle sera integree au fichier final.</p>
+          <div id="slots" class="slots"></div>
+        </div>
+
+        <div class="group">
+          <h2>Musique (optionnel)</h2>
+          <input type="file" id="music" accept="audio/*" />
+          <p class="muted small" id="musicInfo">Ajoute un mp3 : il demarre a la premiere interaction sur le site. Attention, cela alourdit le fichier.</p>
+        </div>
+
+        <div class="downloadbar">
+          <button class="btn primary" id="dl">Telecharger le site</button>
+          <button class="btn" id="openBig">Apercu plein ecran</button>
+          <p class="muted small" id="sizeNote"></p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="previewpane">
+      <div class="device">
+        <iframe id="preview" title="Apercu en direct"></iframe>
+      </div>
+      <p class="muted center small">Apercu en direct</p>
+    </aside>
+  </main>
+</Base>
+
+<script define:vars={{ tplUrl: tpl.url }}>
+  const $ = (s) => document.querySelector(s);
+  const fieldsEl = $('#fields');
+  const slotsEl = $('#slots');
+  const previewEl = $('#preview');
+  const formEl = $('#form');
+  const loadingEl = $('#loadingMsg');
+  const sizeNote = $('#sizeNote');
+
+  let baseDoc = null;
+  const edits = {};     // key -> texte
+  const images = {};    // slot -> dataURL
+  let musicDataUrl = null;
+
+  function labelFor(key) {
+    if (key === 'name') return 'Prenom';
+    if (key === 'opening.eyebrow') return 'Ouverture : sur-titre';
+    if (key === 'opening.title') return 'Ouverture : titre';
+    if (key === 'finale.eyebrow') return 'Finale : sur-titre';
+    if (key === 'finale.title') return 'Finale : titre';
+    if (key === 'finale.sub') return 'Finale : sous-titre';
+    let m = key.match(/^s(\d+)\.kicker$/);
+    if (m) return 'Scene ' + m[1] + ' : etiquette';
+    m = key.match(/^s(\d+)\.line$/);
+    if (m) return 'Scene ' + m[1] + ' : message';
+    return key;
+  }
+  const isLong = (key) => /\.line$/.test(key);
+
+  async function init() {
+    try {
+      const res = await fetch(tplUrl);
+      const txt = await res.text();
+      baseDoc = new DOMParser().parseFromString(txt, 'text/html');
+      buildForm();
+      loadingEl.hidden = true;
+      formEl.hidden = false;
+      render();
+    } catch (e) {
+      loadingEl.textContent = 'Impossible de charger le modele : ' + e;
+    }
+  }
+
+  function buildForm() {
+    // --- Textes ---
+    baseDoc.querySelectorAll('[data-edit]').forEach((el) => {
+      const key = el.getAttribute('data-edit');
+      edits[key] = (el.textContent || '').trim();
+      const wrap = document.createElement('label');
+      wrap.className = 'field';
+      const span = document.createElement('span');
+      span.textContent = labelFor(key);
+      const input = isLong(key) ? document.createElement('textarea') : document.createElement('input');
+      if (isLong(key)) input.rows = 2;
+      input.value = edits[key];
+      input.addEventListener('input', () => { edits[key] = input.value; scheduleRender(); });
+      wrap.appendChild(span);
+      wrap.appendChild(input);
+      fieldsEl.appendChild(wrap);
+    });
+
+    // --- Photos ---
+    const slotEls = [...baseDoc.querySelectorAll('[data-slot]')];
+    if (!slotEls.length) $('#slots').previousElementSibling.textContent = 'Ce modele n’a pas d’emplacement photo.';
+    slotEls.forEach((el) => {
+      const n = el.getAttribute('data-slot');
+      const cell = document.createElement('div');
+      cell.className = 'slot';
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      thumb.textContent = 'Photo ' + n;
+      const file = document.createElement('input');
+      file.type = 'file';
+      file.accept = 'image/*';
+      file.addEventListener('change', () => {
+        const f = file.files && file.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => {
+          images[n] = r.result;
+          thumb.style.backgroundImage = 'url("' + r.result + '")';
+          thumb.textContent = '';
+          scheduleRender();
+        };
+        r.readAsDataURL(f);
+      });
+      cell.appendChild(thumb);
+      cell.appendChild(file);
+      slotsEl.appendChild(cell);
+    });
+
+    // --- Musique ---
+    $('#music').addEventListener('change', (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => { musicDataUrl = r.result; scheduleRender(); };
+      r.readAsDataURL(f);
+    });
+
+    $('#dl').addEventListener('click', download);
+    $('#openBig').addEventListener('click', openBig);
+  }
+
+  function buildDoc() {
+    const doc = baseDoc.cloneNode(true);
+    doc.querySelectorAll('[data-edit]').forEach((el) => {
+      const k = el.getAttribute('data-edit');
+      if (edits[k] != null) el.textContent = edits[k];
+    });
+    if (edits['name']) {
+      const t = doc.querySelector('title');
+      if (t) t.textContent = 'Joyeux anniversaire ' + edits['name'];
+    }
+    doc.querySelectorAll('[data-slot]').forEach((el) => {
+      const n = el.getAttribute('data-slot');
+      if (images[n]) {
+        el.textContent = '';
+        el.style.background = 'center / cover no-repeat #11131a';
+        // Le CSSOM normalise en url("..."), serialise en &quot; dans l'attribut style :
+        // c'est l'echappement HTML correct (revient a url("...") au re-parsing).
+        el.style.backgroundImage = 'url(' + images[n] + ')';
+      }
+    });
+    if (musicDataUrl) {
+      const audio = doc.querySelector('[data-audio]');
+      if (audio) audio.setAttribute('src', musicDataUrl);
+    }
+    return doc;
+  }
+
+  const serialize = (doc) => '<!doctype html>\n' + doc.documentElement.outerHTML;
+
+  let timer = null;
+  function scheduleRender() { clearTimeout(timer); timer = setTimeout(render, 220); }
+
+  function render() {
+    const html = serialize(buildDoc());
+    previewEl.srcdoc = html;
+    const mo = new Blob([html]).size / 1e6;
+    sizeNote.textContent = 'Fichier estime : ' + mo.toFixed(mo < 1 ? 2 : 1) + ' Mo'
+      + (musicDataUrl ? ' (musique incluse)' : '');
+  }
+
+  function fileName() {
+    const base = (edits['name'] || 'anniversaire').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return (base || 'anniversaire') + '.html';
+  }
+
+  function download() {
+    const blob = new Blob([serialize(buildDoc())], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+  function openBig() {
+    const blob = new Blob([serialize(buildDoc())], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+  }
+
+  init();
+</script>
+
+<style>
+  .editor { display:grid; grid-template-columns:minmax(0,1fr) 420px; gap:30px; align-items:start; padding:10px 0 20px; }
+  .back { display:inline-block; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:8px; }
+  .back:hover { color:#fff; }
+  .panel h1 { font-size:34px; margin:0; }
+  .sub { margin:2px 0 18px; }
+  .loading { color:var(--muted); }
+
+  .group { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 18px 20px; margin-bottom:18px; }
+  .group h2 { font-size:19px; margin:0 0 12px; }
+  .small { font-size:13px; }
+
+  .field { display:block; margin-bottom:12px; }
+  .field span { display:block; font-size:12px; letter-spacing:.04em; color:var(--gold); margin-bottom:5px; }
+  .field input, .field textarea { width:100%; background:rgba(7,13,34,.6); border:1px solid var(--line); border-radius:9px; color:var(--text); padding:9px 11px; font:inherit; font-size:14px; resize:vertical; }
+  .field input:focus, .field textarea:focus { outline:none; border-color:var(--accent); }
+
+  .slots { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:12px; }
+  .slot { display:flex; flex-direction:column; gap:6px; }
+  .thumb { aspect-ratio:3/4; border-radius:9px; background:repeating-linear-gradient(45deg,#1a2238,#1a2238 12px,#212a44 12px,#212a44 24px) center/cover no-repeat; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; }
+  .slot input[type=file] { font-size:11px; color:var(--muted); }
+
+  #music { color:var(--muted); font-size:13px; }
+
+  .downloadbar { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+  .downloadbar .small { width:100%; margin:2px 0 0; }
+
+  .previewpane { position:sticky; top:16px; }
+  .device { border:1px solid var(--line); border-radius:22px; overflow:hidden; background:#0a1430; box-shadow:0 30px 70px rgba(0,0,0,.5); }
+  .device iframe { display:block; width:100%; height:720px; border:0; background:#0a1430; }
+  .center { text-align:center; }
+
+  @media (max-width: 900px) {
+    .editor { grid-template-columns:1fr; }
+    .previewpane { position:static; order:-1; }
+    .device iframe { height:540px; }
+  }
+</style>

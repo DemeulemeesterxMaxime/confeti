@@ -1,0 +1,60 @@
+---
+const {
+  title = 'Birthday Website Template',
+  description = "Galerie de sites d'anniversaire romantiques au scroll. Personnalise photos, textes et musique, puis telecharge ton fichier pret a offrir.",
+} = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style is:global>
+    :root { --bg:#070d22; --accent:#9cc0ff; --gold:#e7c89c; --text:#eef3ff; --muted:#9fb2d8; --card:rgba(18,32,68,.55); --line:rgba(156,192,255,.18); }
+    * { box-sizing:border-box; }
+    html, body { margin:0; padding:0; }
+    body {
+      background:
+        radial-gradient(120% 90% at 50% -5%, #16264f 0%, #0a1430 55%, #060b1e 100%) fixed,
+        var(--bg);
+      color:var(--text); font-family:'Nunito',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh;
+    }
+    a { color:inherit; }
+    h1, h2, h3 { font-family:'Cormorant Garamond',serif; font-weight:600; color:#fff; }
+    .wrap { max-width:1140px; margin:0 auto; padding:0 22px; }
+    header.site { display:flex; align-items:center; justify-content:space-between; padding:20px 0; gap:16px; flex-wrap:wrap; }
+    .brand { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:23px; color:#fff; text-decoration:none; white-space:nowrap; }
+    nav.site a { margin-left:18px; text-decoration:none; color:var(--muted); font-size:14px; }
+    nav.site a:hover { color:#fff; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; border:1px solid var(--line); background:rgba(20,34,74,.5); color:var(--text); text-decoration:none; font-size:14px; cursor:pointer; transition:all .18s; }
+    .btn:hover { border-color:var(--accent); background:rgba(156,192,255,.14); }
+    .btn.primary { background:linear-gradient(135deg,#5a7fd6,#9cc0ff); color:#08122c; border:none; font-weight:700; }
+    .btn.primary:hover { filter:brightness(1.06); }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    footer.site { text-align:center; color:var(--muted); font-size:13px; padding:46px 0 30px; }
+    footer.site a { color:var(--accent); text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">🎂 Birthday Website Template</a>
+      <nav class="site">
+        <a href="/">Galerie</a>
+        <a href="/deploy">Déployer</a>
+        <a href="https://github.com/DemeulemeesterxMaxime/birthday-website-template" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+    <slot />
+    <footer class="site">
+      Open source - <a href="https://github.com/DemeulemeesterxMaxime/birthday-website-template" target="_blank" rel="noopener">MIT</a> - fait avec amour 💖
+    </footer>
+  </div>
+</body>
+</html>
