@@ -1,6 +1,6 @@
 ---
 const {
-  title = 'Joyeux - sites de fete a offrir',
+  title = 'Confetti - sites de fete a offrir',
   description = "Cree et offre un site de fete qui se raconte au scroll : anniversaire, fete des peres/meres, et plus. Photos, mots et musique, un seul fichier a partager.",
   active = '',
 } = Astro.props;
@@ -12,7 +12,7 @@ const {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23ef5d57'/%3E%3Ctext x='50' y='72' font-size='62' font-family='Nunito,sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EJ%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23ef5d57'/%3E%3Ctext x='50' y='72' font-size='62' font-family='Nunito,sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -69,7 +69,7 @@ const {
 <body>
   <header class="nav">
     <div class="nav-in wrap">
-      <a class="logo" href="/">Joyeux<span class="dot"></span></a>
+      <a class="logo" href="/">Confetti<span class="dot"></span></a>
       <nav>
         <a href="/galerie" class={active === 'galerie' ? 'on' : ''}>Galerie</a>
         <a href="/create" class={active === 'create' ? 'on' : ''}>Créer</a>
@@ -85,7 +85,7 @@ const {
 
   <footer class="site">
     <div class="in wrap">
-      <span>Joyeux - open source, fait avec amour 💖</span>
+      <span>Confetti - open source, fait avec amour 💖</span>
       <span>
         <a href="https://github.com/DemeulemeesterxMaxime/birthday-website-template" target="_blank" rel="noopener">GitHub</a>
         &nbsp;·&nbsp;

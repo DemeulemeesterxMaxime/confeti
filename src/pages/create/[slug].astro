@@ -8,7 +8,7 @@ export function getStaticPaths() {
 
 const { tpl } = Astro.props;
 ---
-<Base title={`Personnaliser ${tpl.title} - Joyeux`} active="create">
+<Base title={`Personnaliser ${tpl.title} - Confetti`} active="create">
   <div class="topbar">
     <div class="wrap topbar-in">
       <div class="bread"><a href="/galerie">Galerie</a><span>/</span><b>{tpl.title}</b></div>
@@ -35,17 +35,20 @@ const { tpl } = Astro.props;
       <p class="loading" id="loadingMsg">Chargement du modèle…</p>
 
       <div id="form" hidden>
-        <div class="sec"><div class="sec-t">Textes</div><div id="fields"></div></div>
+        <div id="fields"></div>
+
         <div class="sec">
-          <div class="sec-t">Photos</div>
-          <p class="muted small">Une image par emplacement, intégrée au fichier final.</p>
+          <div class="sec-h"><div class="sec-t">Photos</div><span class="count" id="photoCount"></span></div>
           <div id="slots" class="slots"></div>
         </div>
+
         <div class="sec">
           <div class="sec-t">Musique (optionnel)</div>
-          <input type="file" id="music" accept="audio/*" />
-          <p class="muted small" id="musicInfo">Démarre à la première interaction (contrainte iOS). Alourdit le fichier.</p>
+          <label class="drop" id="musicLabel" for="music">♪ Déposer un .mp3</label>
+          <input type="file" id="music" accept="audio/*" hidden />
+          <p class="muted small" id="musicInfo">Démarre à la première interaction (iOS). Alourdit le fichier.</p>
         </div>
+
         <button class="btn primary big" id="dl2">⬇ Télécharger le site</button>
         <p class="muted small center" id="sizeNote"></p>
         <p class="muted small center">Un seul fichier .html · photos & musique intégrées</p>
@@ -62,83 +65,126 @@ const { tpl } = Astro.props;
   const formEl = $('#form');
   const loadingEl = $('#loadingMsg');
   const sizeNote = $('#sizeNote');
+  const photoCount = $('#photoCount');
 
   let baseDoc = null;
   const edits = {};
   const images = {};
   let musicDataUrl = null;
+  let slotTotal = 0, slotDone = 0;
 
   function labelFor(key) {
-    if (key === 'name') return 'Prénom';
     if (key === 'opening.eyebrow') return 'Ouverture : sur-titre';
     if (key === 'opening.title') return 'Ouverture : titre';
     if (key === 'finale.eyebrow') return 'Finale : sur-titre';
     if (key === 'finale.title') return 'Finale : titre';
     if (key === 'finale.sub') return 'Finale : sous-titre';
-    let m = key.match(/^s(\d+)\.kicker$/);
-    if (m) return 'Scène ' + m[1] + ' : étiquette';
-    m = key.match(/^s(\d+)\.line$/);
-    if (m) return 'Scène ' + m[1] + ' : message';
     return key;
   }
-  const isLong = (key) => /\.line$/.test(key);
 
-  async function init() {
-    try {
-      const res = await fetch(tplUrl);
-      const txt = await res.text();
-      baseDoc = new DOMParser().parseFromString(txt, 'text/html');
-      buildForm();
-      loadingEl.hidden = true;
-      formEl.hidden = false;
-      render();
-    } catch (e) {
-      loadingEl.textContent = 'Impossible de charger le modèle : ' + e;
-    }
+  function subheader(text) {
+    const d = document.createElement('div');
+    d.className = 'sub-t';
+    d.textContent = text;
+    fieldsEl.appendChild(d);
+  }
+
+  // Une "carte champ" : etiquette coral + zone editable integree (style maquette)
+  function fieldCard(key, label, opts) {
+    opts = opts || {};
+    edits[key] = edits[key] != null ? edits[key] : '';
+    const card = document.createElement('div');
+    card.className = 'fld' + (opts.cls ? ' ' + opts.cls : '');
+    const k = document.createElement('div');
+    k.className = 'fld-k';
+    k.textContent = label;
+    const input = opts.multiline ? document.createElement('textarea') : document.createElement('input');
+    if (opts.multiline) input.rows = 2;
+    input.value = edits[key];
+    input.addEventListener('input', () => { edits[key] = input.value; scheduleRender(); });
+    card.appendChild(k);
+    card.appendChild(input);
+    fieldsEl.appendChild(card);
+    return card;
   }
 
   function buildForm() {
     const editEls = Array.prototype.slice.call(baseDoc.querySelectorAll('[data-edit]'));
-    editEls.sort((a, b) => {
-      if (a.getAttribute('data-edit') === 'name') return -1;
-      if (b.getAttribute('data-edit') === 'name') return 1;
-      return 0;
-    });
-    editEls.forEach((el) => {
-      const key = el.getAttribute('data-edit');
-      edits[key] = (el.textContent || '').trim();
-      const wrap = document.createElement('label');
-      wrap.className = 'field';
-      const span = document.createElement('span');
-      span.textContent = labelFor(key);
-      const input = isLong(key) ? document.createElement('textarea') : document.createElement('input');
-      if (isLong(key)) input.rows = 2;
-      input.value = edits[key];
-      input.addEventListener('input', () => { edits[key] = input.value; scheduleRender(); });
-      wrap.appendChild(span);
-      wrap.appendChild(input);
-      fieldsEl.appendChild(wrap);
+    const keys = editEls.map((el) => {
+      edits[el.getAttribute('data-edit')] = (el.textContent || '').trim();
+      return el.getAttribute('data-edit');
     });
 
+    // Prenom
+    if (keys.indexOf('name') > -1) {
+      fieldCard('name', 'Prénom', { cls: 'name' });
+    }
+
+    // Scenes (sN.kicker + sN.line) groupees en cartes
+    const sceneNums = [];
+    keys.forEach((k) => {
+      const m = k.match(/^s(\d+)\./);
+      if (m && sceneNums.indexOf(+m[1]) === -1) sceneNums.push(+m[1]);
+    });
+    sceneNums.sort((a, b) => a - b);
+    if (sceneNums.length) {
+      subheader('Messages');
+      sceneNums.forEach((n) => {
+        const kk = 's' + n + '.kicker', lk = 's' + n + '.line';
+        const card = document.createElement('div');
+        card.className = 'fld scene';
+        if (keys.indexOf(kk) > -1) {
+          const ki = document.createElement('input');
+          ki.className = 'k-in';
+          ki.value = edits[kk] || '';
+          ki.addEventListener('input', () => { edits[kk] = ki.value; scheduleRender(); });
+          card.appendChild(ki);
+        }
+        if (keys.indexOf(lk) > -1) {
+          const li = document.createElement('textarea');
+          li.className = 'l-in';
+          li.rows = 2;
+          li.value = edits[lk] || '';
+          li.addEventListener('input', () => { edits[lk] = li.value; scheduleRender(); });
+          card.appendChild(li);
+        }
+        fieldsEl.appendChild(card);
+      });
+    }
+
+    // Ouverture & finale
+    const extra = keys.filter((k) => /^(opening|finale)\./.test(k));
+    if (extra.length) {
+      subheader('Ouverture & finale');
+      extra.forEach((k) => fieldCard(k, labelFor(k), {}));
+    }
+
+    // Photos
     const slotEls = Array.prototype.slice.call(baseDoc.querySelectorAll('[data-slot]'));
+    slotTotal = slotEls.length;
+    updateCount();
     slotEls.forEach((el) => {
       const n = el.getAttribute('data-slot');
-      const cell = document.createElement('div');
+      const cell = document.createElement('label');
       cell.className = 'slot';
       const thumb = document.createElement('div');
       thumb.className = 'thumb';
-      thumb.textContent = n;
+      thumb.textContent = '+';
       const file = document.createElement('input');
       file.type = 'file';
       file.accept = 'image/*';
+      file.hidden = true;
       file.addEventListener('change', () => {
         const f = file.files && file.files[0];
         if (!f) return;
         const r = new FileReader();
         r.onload = () => {
+          if (!images[n]) slotDone++;
           images[n] = r.result;
           thumb.style.backgroundImage = 'url(' + r.result + ')';
+          thumb.classList.add('filled');
           thumb.textContent = '';
+          updateCount();
           scheduleRender();
         };
         r.readAsDataURL(f);
@@ -151,6 +197,8 @@ const { tpl } = Astro.props;
     $('#music').addEventListener('change', (e) => {
       const f = e.target.files && e.target.files[0];
       if (!f) return;
+      $('#musicLabel').textContent = '♪ ' + f.name;
+      $('#musicLabel').classList.add('set');
       const r = new FileReader();
       r.onload = () => { musicDataUrl = r.result; scheduleRender(); };
       r.readAsDataURL(f);
@@ -160,6 +208,8 @@ const { tpl } = Astro.props;
     $('#dl2').addEventListener('click', download);
     $('#openBig').addEventListener('click', openBig);
   }
+
+  function updateCount() { if (photoCount) photoCount.textContent = slotDone + ' / ' + slotTotal + ' ajoutées'; }
 
   function buildDoc() {
     const doc = baseDoc.cloneNode(true);
@@ -200,10 +250,10 @@ const { tpl } = Astro.props;
   }
 
   function fileName() {
-    const base = (edits['name'] || 'joyeux').toLowerCase()
+    const base = (edits['name'] || 'fete').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g, '')
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return 'joyeux-' + (base || 'fete') + '.html';
+    return 'confetti-' + (base || 'fete') + '.html';
   }
 
   function download() {
@@ -220,6 +270,20 @@ const { tpl } = Astro.props;
   function openBig() {
     const blob = new Blob([serialize(buildDoc())], { type: 'text/html' });
     window.open(URL.createObjectURL(blob), '_blank');
+  }
+
+  async function init() {
+    try {
+      const res = await fetch(tplUrl);
+      const txt = await res.text();
+      baseDoc = new DOMParser().parseFromString(txt, 'text/html');
+      buildForm();
+      loadingEl.hidden = true;
+      formEl.hidden = false;
+      render();
+    } catch (e) {
+      loadingEl.textContent = 'Impossible de charger le modèle : ' + e;
+    }
   }
 
   init();
@@ -243,27 +307,43 @@ const { tpl } = Astro.props;
   .muted { color:var(--faint); }
 
   .panel { padding:22px; }
-  .panel-h { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .panel-h { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .panel-h h2 { font-size:16px; font-weight:800; margin:0; }
   .panel-h .pill { text-decoration:none; }
   .loading { color:var(--faint); }
 
-  .sec { padding:14px 0; border-top:1px solid var(--line); }
-  .sec:first-of-type { border-top:0; padding-top:0; }
-  .sec-t { font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+  .sub-t { font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin:18px 0 9px; }
+  .sub-t:first-child { margin-top:4px; }
 
-  .field { display:block; margin-bottom:10px; }
-  .field span { display:block; font-weight:700; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--coral); margin-bottom:5px; }
-  .field input, .field textarea { width:100%; background:var(--cream); border:1.5px solid var(--line); border-radius:10px; color:var(--ink); padding:10px 12px; font:inherit; font-size:14px; resize:vertical; }
-  .field input:focus, .field textarea:focus { outline:none; border-color:var(--coral); }
+  /* Carte champ (style maquette) */
+  .fld { background:var(--cream); border:1.5px solid var(--line); border-radius:11px; padding:10px 13px; margin-bottom:8px; transition:border-color .15s, box-shadow .15s; }
+  .fld:focus-within { border-color:var(--coral); box-shadow:0 0 0 3px rgba(239,93,87,.12); }
+  .fld-k { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:5px; }
+  .fld input, .fld textarea { width:100%; border:0; background:transparent; padding:0; margin:0; font:inherit; color:var(--ink); resize:vertical; }
+  .fld input:focus, .fld textarea:focus { outline:none; }
+  .fld.name input { font-weight:800; font-size:16px; }
 
-  .slots { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-  .slot { display:flex; flex-direction:column; gap:5px; }
-  .thumb { aspect-ratio:3/4; border-radius:9px; background:repeating-linear-gradient(45deg,#ece9df,#ece9df 7px,#e4e0d3 7px,#e4e0d3 14px) center/cover no-repeat; display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:12px; font-weight:800; }
-  .slot input[type=file] { font-size:10px; color:var(--faint); width:100%; }
+  /* Carte scene : kicker coral editable + message serif italique */
+  .fld.scene .k-in { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:6px; }
+  .fld.scene .l-in { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:15px; line-height:1.3; color:var(--ink); }
 
-  #music { color:var(--faint); font-size:13px; }
-  .btn.big { width:100%; padding:14px; margin-top:8px; }
+  .sec { padding:16px 0 0; margin-top:16px; border-top:1px solid var(--line); }
+  .sec-h { display:flex; align-items:center; justify-content:space-between; }
+  .sec-t { font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+  .sec-h .sec-t { margin-bottom:0; }
+  .count { font-weight:700; font-size:11px; color:var(--faint); }
+
+  .slots { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; }
+  .slot { cursor:pointer; }
+  .thumb { aspect-ratio:3/4; border-radius:9px; border:1.5px dashed var(--line); display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:20px; font-weight:700; background-size:cover; background-position:center; transition:border-color .15s; }
+  .slot:hover .thumb { border-color:var(--coral); color:var(--coral); }
+  .thumb.filled { border:1.5px solid var(--line); }
+
+  .drop { display:block; text-align:center; border-radius:11px; border:1.5px dashed var(--line); background:var(--cream); padding:13px; font-weight:700; font-size:13px; color:var(--faint); cursor:pointer; transition:border-color .15s, color .15s; }
+  .drop:hover { border-color:var(--coral); color:var(--coral); }
+  .drop.set { border-style:solid; color:var(--ink); }
+
+  .btn.big { width:100%; padding:14px; margin-top:14px; }
 
   @media (max-width:900px) {
     .ed-grid { grid-template-columns:1fr; }

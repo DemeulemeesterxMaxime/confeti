@@ -8,7 +8,7 @@ dans **[`AGENT.md`](AGENT.md)** - lis-le en premier. Ici, les points utiles a Cl
 - `public/templates/<slug>/` : les modeles (HTML autonome + `meta.json` + `music.mp3` optionnels).
 - Pages : `index.astro` (Accueil), `galerie.astro` (Galerie), `create.astro` (Créer par IA, stub),
   `create/[slug].astro` (Éditeur/personnalisateur, JS client), `deploy.astro`.
-- Thème **Festif & Coloré** (marque Joyeux) : tokens CSS dans `src/layouts/Base.astro`
+- Thème **Festif & Coloré** (marque Confetti) : tokens CSS dans `src/layouts/Base.astro`
   (coral `#ef5d57`, crème `#fdf7ee`, encre `#2b2435`). Composant carte : `src/components/Card.astro`.
 - `src/lib/templates.js` : scan du dossier templates au build (`fs`).
 - Commandes : `npm install`, `npm run dev` (port 4321), `npm run build` (sortie `dist/`).

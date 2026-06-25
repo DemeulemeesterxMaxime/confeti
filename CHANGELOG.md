@@ -5,7 +5,7 @@ Versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [2.1.0] - 2026-06-25
 ### Ajoute / Modifie
-- Identite de marque **Joyeux** (wordmark + point coral signature) sur toute l'app.
+- Identite de marque **Confetti** (wordmark + point coral signature) sur toute l'app.
 - Refonte visuelle **Festif & Colore** : Accueil (landing), Galerie (filtres + recherche),
   Editeur (personnalisateur), Deployer - fond creme, primaire coral, Nunito 800.
 - Nouvelle page **Creer par IA** (composeur ; generation a venir / stub).
