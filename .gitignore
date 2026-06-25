@@ -1,0 +1,17 @@
+# Musique : ne pas committer d'audio (souvent sous copyright). À ajouter en local.
+*.mp3
+*.m4a
+*.aac
+*.ogg
+*.wav
+
+# Outils / build
+node_modules/
+.vercel/
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
