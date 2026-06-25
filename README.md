@@ -1,6 +1,6 @@
-# 🎂 Birthday Scroll — un site d'anniversaire qui se raconte au scroll
+# 🎂 Birthday Website Template - site d'anniversaire romantique au scroll
 
-> **EN — TL;DR**: A single-file, no-build, scroll-driven birthday website you can
+> **EN - TL;DR**: A single-file, no-build, scroll-driven birthday website you can
 > offer to someone you love. Copy `index.html`, change the name and the messages,
 > drop in your photos and a song, open it (or deploy it free on Vercel). Works great
 > on iPhone (Safari iOS) and desktop. AI-friendly: see [`AGENT.md`](AGENT.md).
@@ -20,17 +20,17 @@ copine / ton copain / qui tu veux. 💖
 
 1. **Récupère le projet**
    ```bash
-   git clone https://github.com/DemeulemeesterxMaxime/birthday-scroll.git
-   cd birthday-scroll
+   git clone https://github.com/DemeulemeesterxMaxime/birthday-website-template.git
+   cd birthday-website-template
    ```
    (ou télécharge juste `index.html`, c'est le seul fichier indispensable.)
 
-2. **Change le prénom et les messages** — voir [« Personnaliser le texte »](#-personnaliser-le-texte).
+2. **Change le prénom et les messages** - voir [« Personnaliser le texte »](#-personnaliser-le-texte).
    Une IA (Claude, ChatGPT…) peut le faire pour toi : donne-lui [`AGENT.md`](AGENT.md).
 
-3. **Ajoute tes photos** — voir [« Ajouter tes photos »](#-ajouter-tes-photos).
+3. **Ajoute tes photos** - voir [« Ajouter tes photos »](#-ajouter-tes-photos).
 
-4. **Ajoute une musique** (optionnel) — voir [« Ajouter une musique »](#-ajouter-une-musique).
+4. **Ajoute une musique** (optionnel) - voir [« Ajouter une musique »](#-ajouter-une-musique).
 
 5. **Ouvre `index.html`** dans ton navigateur pour prévisualiser, puis
    [**déploie-le en ligne**](#-mettre-en-ligne-gratuit-vercel) pour avoir une URL à partager.
@@ -71,7 +71,7 @@ Il y a **10 scènes** :
 Le template contient **8 cadres vides** marqués `Ta photo ici`
 (`<div class="photo-ph" …>`). Deux méthodes :
 
-**Méthode A — fichiers à côté (simple)**
+**Méthode A - fichiers à côté (simple)**
 1. Mets tes images dans le dossier (ex. `photos/1.jpg`, `photos/2.jpg`…).
 2. Remplace chaque placeholder par une image, **en gardant la même taille** :
    ```html
@@ -81,7 +81,7 @@ Le template contient **8 cadres vides** marqués `Ta photo ici`
    <img src="photos/1.jpg" alt="" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);object-fit:cover;border-radius:3px;">
    ```
 
-**Méthode B — tout-en-un (fichier unique partageable)**
+**Méthode B - tout-en-un (fichier unique partageable)**
 Encode l'image en base64 et mets-la dans `src="data:image/jpeg;base64,…"`. Le site
 reste alors **un seul fichier** que tu peux envoyer tel quel. (Une IA peut faire la
 conversion pour toi.)
@@ -105,7 +105,7 @@ et le bouton ♪ permet de **couper / remettre**. Elle tourne en boucle.
 > silencieux** (interrupteur latéral) et que le volume est monté.
 >
 > 🔒 **Dépôt public** : ne committe pas de musique sous copyright. `*.mp3` est ignoré
-> par `.gitignore` — ajoute ton `music.mp3` en local seulement.
+> par `.gitignore` - ajoute ton `music.mp3` en local seulement.
 
 Pour changer le nom du fichier attendu, modifie `MUSIC_SRC` en haut du `<script>`.
 
@@ -140,10 +140,10 @@ glisse le dossier sur https://app.netlify.com/drop.)
 
 ## 🤖 Aide par IA
 
-- [`AGENT.md`](AGENT.md) — guide générique pour n'importe quel agent IA (carte du
+- [`AGENT.md`](AGENT.md) - guide générique pour n'importe quel agent IA (carte du
   contenu, où modifier le texte/les photos/la musique, règles pour ne pas casser le
   défilement iOS, comment vérifier).
-- [`CLAUDE.md`](CLAUDE.md) — repères spécifiques à Claude Code.
+- [`CLAUDE.md`](CLAUDE.md) - repères spécifiques à Claude Code.
 
 ---
 
@@ -172,5 +172,5 @@ propre variante (thème, couleurs, langue, mise en page…), **crée une branche
 
 ## 📄 Licence
 
-[MIT](LICENSE) — fais-en ce que tu veux. Un crédit fait toujours plaisir, mais n'est
+[MIT](LICENSE) - fais-en ce que tu veux. Un crédit fait toujours plaisir, mais n'est
 pas obligatoire. ✨

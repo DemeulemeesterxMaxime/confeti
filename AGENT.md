@@ -1,4 +1,4 @@
-# AGENT.md — guide pour les agents IA
+# AGENT.md - guide pour les agents IA
 
 Ce dépôt est un **site d'anniversaire en un seul fichier** (`index.html`), sans build
 ni dépendance. Ce document explique à un agent IA (Claude, ChatGPT, etc.) **comment
@@ -95,7 +95,7 @@ Remplace un cadre par une image **en gardant exactement les mêmes `width`/`heig
 
 - Le code lit `MUSIC_SRC` (par défaut `'music.mp3'`) en haut du `<script>`.
 - La lecture démarre **à la première interaction** de l'utilisateur (tap / début de
-  scroll / touche) — contrainte iOS : pas de son sans geste. Le bouton ♪ coupe/remet.
+  scroll / touche) - contrainte iOS : pas de son sans geste. Le bouton ♪ coupe/remet.
 - Ne committe pas de musique sous copyright dans le dépôt public (`*.mp3` est ignoré).
 
 ---
@@ -108,7 +108,7 @@ du `<body>`. Polices : `<link>` Google Fonts dans le `<head>`.
 ---
 
 ## ⛔ À NE PAS toucher (sinon le scroll casse, surtout sur iPhone)
-- `body { overflow-x:clip }` — **ne pas** remettre `hidden` : sur iOS Safari, `hidden`
+- `body { overflow-x:clip }` - **ne pas** remettre `hidden` : sur iOS Safari, `hidden`
   fait du `<body>` un conteneur de défilement, `window.scrollY` reste à 0 et les scènes
   ne bougent plus.
 - La logique `VH` / `layout()` / `update()` / le `data-spacer` : la géométrie est

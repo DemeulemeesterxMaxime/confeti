@@ -1,8 +1,8 @@
-# CLAUDE.md — repères pour Claude Code
+# CLAUDE.md - repères pour Claude Code
 
 Projet : **site d'anniversaire en un seul fichier** (`index.html`), sans build ni
 dépendance. Le guide complet (carte du contenu, photos, musique, règles) est dans
-**[`AGENT.md`](AGENT.md)** — lis-le en premier. Ce fichier ajoute les points utiles
+**[`AGENT.md`](AGENT.md)** - lis-le en premier. Ce fichier ajoute les points utiles
 spécifiquement à Claude Code.
 
 ## L'essentiel
@@ -20,7 +20,7 @@ spécifiquement à Claude Code.
 - Garde les messages courts (~1 phrase, < ~90 caractères) pour ne pas déborder en
   mobile (tailles en `clamp`).
 
-## Modifier le texte — méthode
+## Modifier le texte - méthode
 Utilise **Edit** avec des chaînes exactes (repère l'étiquette `class="kicker"` puis le
 `class="line"` adjacent). Le fichier peut être lourd s'il contient des photos base64 :
 édite par chaînes ciblées, **n'essaie pas de tout réécrire**. Pour insérer/convertir

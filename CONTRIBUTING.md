@@ -5,7 +5,7 @@ Merci de l'intérêt ! Ce projet a un modèle de contribution un peu particulier
 ## `main` est figée
 
 La branche **`main` est la version de référence** du template. **Aucune contribution
-n'y est mergée** — n'ouvre pas de Pull Request vers `main` (elle ne sera pas acceptée).
+n'y est mergée** - n'ouvre pas de Pull Request vers `main` (elle ne sera pas acceptée).
 `main` reste volontairement simple et stable pour que tout le monde parte de la même base.
 
 ## Partage ta variante dans une branche
