@@ -15,9 +15,14 @@ export function getTemplates() {
       let meta = {};
       const metaPath = path.join(dir, 'meta.json');
       if (fs.existsSync(metaPath)) {
-        try { meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8')); } catch { /* meta optionnel */ }
+        try {
+          meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+        } catch {
+          /* meta optionnel */
+        }
       }
-      const title = meta.title || slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+      const title =
+        meta.title || slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
       return {
         slug,
         title,

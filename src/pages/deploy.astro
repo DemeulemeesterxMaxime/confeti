@@ -1,17 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
-const repo = 'https://github.com/DemeulemeesterxMaxime/confetti';
+const repo = 'https://github.com/DemeulemeesterxMaxime/Confeti';
 const deployBtn = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(repo)}`;
 ---
+
 <Base
-  title="Héberger ton site d'anniversaire - Confetti"
+  title="Héberger ton site d'anniversaire - Confeti"
   description="Mets ton site d'anniversaire en ligne en 2 minutes : via Vercel (gratuit), GitHub Pages, ou un simple partage de fichier. Obtiens un lien à envoyer par SMS ou email."
   active="deploy"
 >
   <section class="wrap head">
     <span class="pill green">🚀 Dernière étape</span>
     <h1>Mets ton site en ligne en 2 minutes</h1>
-    <p>Tu as téléchargé ton fichier <code>.html</code>. Choisis comment le mettre en ligne et obtiens un lien à partager.</p>
+    <p>
+      Tu as téléchargé ton fichier <code>.html</code>. Choisis comment le mettre en ligne et obtiens
+      un lien à partager.
+    </p>
   </section>
 
   <section class="wrap cols">
@@ -41,45 +45,151 @@ const deployBtn = `https://vercel.com/new/clone?repository-url=${encodeURICompon
     </div>
   </section>
 
-  <p class="wrap tip">💡 Le fichier fonctionne aussi hors-ligne - tu peux simplement l'envoyer par message.</p>
+  <p class="wrap tip">
+    💡 Le fichier fonctionne aussi hors-ligne - tu peux simplement l'envoyer par message.
+  </p>
 
   <section class="wrap add">
     <h3>Ajouter un modèle au projet</h3>
     <p class="muted">
       Dépose un dossier dans <code>public/templates/&lt;slug&gt;/</code> (avec
-      <code>index.html</code>, et au choix <code>meta.json</code> / <code>music.mp3</code>),
-      marque les photos <code>data-slot</code> et les textes <code>data-edit</code>. Détails :
-      <a href={`${repo}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener">CONTRIBUTING.md</a>.
-      Les contributions se font dans des branches (<code>main</code> reste figée).
+      <code>index.html</code>, et au choix <code>meta.json</code> / <code>music.mp3</code>), marque
+      les photos <code>data-slot</code> et les textes <code>data-edit</code>. Détails :
+      <a href={`${repo}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener"
+        >CONTRIBUTING.md</a
+      >. Les contributions se font dans des branches (<code>main</code> reste figée).
     </p>
   </section>
 </Base>
 
 <style>
-  .head { text-align:center; padding:42px 24px 20px; }
-  .head h1 { font-size:clamp(30px,4.6vw,42px); font-weight:800; letter-spacing:-.02em; margin:16px 0 10px; }
-  .head p { color:var(--muted); max-width:620px; margin:0 auto; font-size:16px; }
-  code { background:var(--cream2); padding:2px 7px; border-radius:6px; font-size:.9em; color:var(--ink); }
+  .head {
+    text-align: center;
+    padding: 42px 24px 20px;
+  }
+  .head h1 {
+    font-size: clamp(30px, 4.6vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 16px 0 10px;
+  }
+  .head p {
+    color: var(--muted);
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 16px;
+  }
+  code {
+    background: var(--cream2);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    color: var(--ink);
+  }
 
-  .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .pad { padding:28px; }
-  .ct { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .ct h2 { font-size:20px; font-weight:800; margin:0; }
-  .muted { color:var(--muted); font-size:14px; }
-  .drop { display:block; text-align:center; border-radius:14px; border:2px dashed var(--green); background:#f4fbf7; padding:24px; margin:8px 0 4px; }
-  .drop-t { font-weight:800; }
-  .drop-d { color:var(--faint); font-size:13px; margin-top:5px; }
-  .btn.big { width:100%; padding:16px; margin:8px 0 4px; }
-  .steps { list-style:none; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:10px; }
-  .steps li { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px; }
-  .steps li span { width:24px; height:24px; border-radius:50%; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex:none; }
-  .steps.green li span { background:var(--green); }
-  .steps.blue li span { background:var(--blue); }
-  .steps b { color:var(--ink); }
-  .tip { text-align:center; color:var(--faint); font-size:13px; padding:24px; }
-  .add { padding:6px 24px 10px; }
-  .add h3 { font-size:18px; font-weight:800; margin:0 0 6px; }
-  .add a { color:var(--coral); font-weight:700; }
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .pad {
+    padding: 28px;
+  }
+  .ct {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .ct h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+  }
+  .muted {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .drop {
+    display: block;
+    text-align: center;
+    border-radius: 14px;
+    border: 2px dashed var(--green);
+    background: #f4fbf7;
+    padding: 24px;
+    margin: 8px 0 4px;
+  }
+  .drop-t {
+    font-weight: 800;
+  }
+  .drop-d {
+    color: var(--faint);
+    font-size: 13px;
+    margin-top: 5px;
+  }
+  .btn.big {
+    width: 100%;
+    padding: 16px;
+    margin: 8px 0 4px;
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .steps li span {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .steps.green li span {
+    background: var(--green);
+  }
+  .steps.blue li span {
+    background: var(--blue);
+  }
+  .steps b {
+    color: var(--ink);
+  }
+  .tip {
+    text-align: center;
+    color: var(--faint);
+    font-size: 13px;
+    padding: 24px;
+  }
+  .add {
+    padding: 6px 24px 10px;
+  }
+  .add h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 6px;
+  }
+  .add a {
+    color: var(--coral);
+    font-weight: 700;
+  }
 
-  @media (max-width:760px) { .cols { grid-template-columns:1fr; } }
+  @media (max-width: 760px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

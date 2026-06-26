@@ -4,12 +4,19 @@
 // data-decor de la racine est remplacé, et le script de la template génère le champ
 // de particules correspondant (étoiles, cœurs, étincelles, fleurs, Confetis...).
 export const DECORS = [
-  { id: "stars", label: "Étoiles", glyph: "✦" },
-  { id: "hearts", label: "Cœurs", glyph: "♥" },
-  { id: "sparkles", label: "Étincelles", glyph: "✨" },
-  { id: "flowers", label: "Fleurs", glyph: "🌸" },
-  { id: "Confeti", label: "Confetis", glyph: "🎉" },
-  { id: "none", label: "Aucun", glyph: "∅" },
+  { id: 'stars', label: 'Étoiles', glyph: '✦' },
+  { id: 'hearts', label: 'Cœurs', glyph: '♥' },
+  { id: 'sparkles', label: 'Étincelles', glyph: '✨' },
+  { id: 'flowers', label: 'Fleurs', glyph: '🌸' },
+  { id: 'Confeti', label: 'Confetis', glyph: '🎉' },
+  { id: 'bubbles', label: 'Bulles', glyph: '🫧' },
+  { id: 'snow', label: 'Neige', glyph: '❄️' },
+  { id: 'music', label: 'Notes', glyph: '🎵' },
+  { id: 'butterflies', label: 'Papillons', glyph: '🦋' },
+  { id: 'balloons', label: 'Ballons', glyph: '🎈' },
+  { id: 'leaves', label: 'Feuilles', glyph: '🍂' },
+  { id: 'moon', label: 'Nuit', glyph: '🌙' },
+  { id: 'none', label: 'Aucun', glyph: '∅' },
 ];
 
-export const DEFAULT_DECOR = "stars";
+export const DEFAULT_DECOR = 'stars';

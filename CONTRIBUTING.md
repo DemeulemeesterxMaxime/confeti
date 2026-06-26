@@ -34,13 +34,15 @@ public/templates/<slug>/
 La galerie lit le dossier automatiquement au build (rien d'autre a declarer).
 
 ### Pour qu'il soit personnalisable dans la galerie
+
 - Marque chaque cadre photo : `data-slot="1"`, `data-slot="2"`, ...
 - Marque chaque texte editable : `data-edit="cle"` (`name`, `opening.title`,
   `s1.kicker`, `s1.line`, `finale.title`, ...).
 - Le personnalisateur detecte ces attributs et genere automatiquement le formulaire
-  + le telechargement. Details : [`AGENT.md`](AGENT.md).
+  - le telechargement. Details : [`AGENT.md`](AGENT.md).
 
 ### Bonnes pratiques
+
 - Garde le principe **un seul fichier** `index.html` (sans build cote modele).
 - **Pas de contenu perso ni de fichiers sous copyright** committes (photos privees,
   musiques protegees). Utilise des placeholders ou des assets libres de droits.
@@ -48,9 +50,11 @@ La galerie lit le dossier automatiquement au build (rien d'autre a declarer).
 - Teste sur mobile (Safari iOS) avant de pousser.
 
 ## Suite envisagee
+
 Si beaucoup de modeles arrivent : une galerie enrichie agregant les branches, et un
-**createur de page propulse par IA**. Idees et retours bienvenus via les *Issues*.
+**createur de page propulse par IA**. Idees et retours bienvenus via les _Issues_.
 
 ## Bugs sur la base commune
-Ouvre une *Issue* (decris l'appareil/navigateur). Les correctifs de fond sont geres par
+
+Ouvre une _Issue_ (decris l'appareil/navigateur). Les correctifs de fond sont geres par
 le mainteneur.

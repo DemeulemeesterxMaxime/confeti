@@ -1,6 +1,6 @@
-# 🎂 Confetti - galerie + personnalisateur de sites de fete (toutes occasions)
+# 🎂 Confeti - galerie + personnalisateur de sites de fete (toutes occasions)
 
-> Marque **Confetti** (point coral en signature). Anniversaire, fete des meres/peres,
+> Marque **Confeti** (point coral en signature). Anniversaire, fete des meres/peres,
 > felicitations... un site qui se raconte au scroll, a personnaliser et offrir.
 
 > **EN - TL;DR**: An open-source gallery of single-file, scroll-driven birthday
@@ -56,6 +56,7 @@ public/templates/mon-modele/
 
 La galerie lit automatiquement le dossier au build (rien a declarer ailleurs). Pour que
 ton modele soit **personnalisable** dans la galerie, marque :
+
 - chaque cadre photo avec `data-slot="1"`, `data-slot="2"`, ...
 - chaque texte editable avec `data-edit="cle"` (`name`, `opening.title`, `s1.kicker`,
   `s1.line`, `finale.title`, ...).
@@ -66,14 +67,37 @@ Voir [`AGENT.md`](AGENT.md) (convention complete) et [`CONTRIBUTING.md`](CONTRIB
 
 ## 🛠️ Developpement local
 
-Pre-requis : Node 18+.
+Pre-requis : **Node 22.12+** (exige par Astro 6 ; runtime Vercel ; voir `.nvmrc`).
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321  (galerie + personnalisateur)
-npm run build    # genere dist/ (site statique)
-npm run preview  # sert le build
+npm run dev          # http://localhost:4321  (galerie + personnalisateur)
+npm run build        # genere dist/ + .vercel/output (adaptateur Vercel)
+npm run preview      # sert le build
+
+npm test             # tests unitaires (Vitest)
+npm run coverage     # tests + couverture
+npm run lint         # ESLint + astro check (typage)
+npm run format       # verifie le formatage (Prettier)
+npm run format:write # applique le formatage
 ```
+
+## ✅ Integration continue (CI/CD)
+
+Le projet est valide automatiquement par **GitHub Actions** (voir `.github/workflows/`) :
+
+| Workflow         | Declencheur                | Role                                                        |
+| ---------------- | -------------------------- | ----------------------------------------------------------- |
+| `ci.yml`         | push / PR                  | ESLint + `astro check`, Prettier, tests + couverture, build |
+| `security.yml`   | push / PR + hebdo          | `audit-ci` (deps) + Gitleaks (secrets)                      |
+| `codeql.yml`     | push / PR main + hebdo     | Analyse statique de securite (SAST)                         |
+| `lighthouse.yml` | PR                         | Audit perf / SEO / accessibilite sur le build               |
+| `deploy.yml`     | PR (preview) / main (prod) | Deploiement Vercel via la CLI                               |
+
+`dependabot.yml` met a jour les dependances npm et les actions chaque semaine.
+
+Le job de deploiement requiert trois **secrets GitHub** : `VERCEL_TOKEN`,
+`VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ces deux derniers sont dans `.vercel/project.json`).
 
 Structure :
 

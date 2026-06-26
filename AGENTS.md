@@ -1,8 +1,8 @@
-# CLAUDE.md - repères pour Claude Code
+# AGENTS.md - repères pour Codex
 
 Projet en deux parties : une **galerie Astro** (`src/`) et des **modeles autonomes
 "un seul fichier"** dans `public/templates/<slug>/index.html`. Le guide complet est
-dans **[`AGENT.md`](AGENT.md)** - lis-le en premier. Ici, les points utiles a Claude Code.
+dans **[`AGENT.md`](AGENT.md)** - lis-le en premier. Ici, les points utiles a Codex.
 
 ## Structure & commandes
 
@@ -13,10 +13,6 @@ dans **[`AGENT.md`](AGENT.md)** - lis-le en premier. Ici, les points utiles a Cl
   (coral `#ef5d57`, crème `#fdf7ee`, encre `#2b2435`). Composant carte : `src/components/Card.astro`.
 - `src/lib/templates.js` : scan du dossier templates au build (`fs`).
 - Commandes : `npm install`, `npm run dev` (port 4321), `npm run build` (sortie `dist/`).
-- Qualité/CI : `npm test` (Vitest), `npm run coverage`, `npm run lint` (ESLint + `astro check`),
-  `npm run format` / `format:write` (Prettier). CI dans `.github/workflows/` (ci, security,
-  codeql, lighthouse, deploy). Node **22** (`.nvmrc`, runtime Vercel). Avant un commit,
-  `npm run lint && npm run format && npm test` doivent passer.
 - Réponds et commente **en français**.
 
 ## Personnaliser un modele
