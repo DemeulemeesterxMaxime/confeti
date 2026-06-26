@@ -94,6 +94,12 @@ const jsonLd = {
         font-family: 'Nunito', sans-serif;
         -webkit-font-smoothing: antialiased;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      /* Sticky footer : le main pousse le footer en bas même si le contenu est court */
+      main {
+        flex: 1 0 auto;
       }
       a {
         color: inherit;
