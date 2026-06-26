@@ -1,6 +1,6 @@
 ---
 const {
-  title = 'Confetti — Crée et offre un site d\'anniversaire unique',
+  title = 'Confeti — Crée et offre un site d\'anniversaire unique',
   description = 'Crée et offre un site d\'anniversaire qui se raconte au scroll : photos, messages et musique assemblés en un seul fichier HTML à partager. Sans coder, 100 % gratuit.',
   active = '',
   canonical = Astro.url.href,
@@ -11,7 +11,7 @@ const siteUrl = 'https://confeti.fun';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Confetti',
+  name: 'Confeti',
   url: siteUrl,
   description,
   applicationCategory: 'UtilitiesApplication',
@@ -31,7 +31,7 @@ const jsonLd = {
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Confetti" />
+  <meta property="og:site_name" content="Confeti" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
@@ -106,7 +106,7 @@ const jsonLd = {
 <body>
   <header class="nav">
     <div class="nav-in wrap">
-      <a class="logo" href="/">Confetti<span class="dot"></span></a>
+      <a class="logo" href="/">Confeti<span class="dot"></span></a>
       <nav>
         <a href="/galerie" class={active === 'galerie' ? 'on' : ''}>Galerie</a>
         <a href="/create" class={active === 'create' ? 'on' : ''}>Créer</a>
@@ -122,7 +122,7 @@ const jsonLd = {
 
   <footer class="site">
     <div class="in wrap">
-      <span>Confetti - open source, fait avec amour 💖</span>
+      <span>Confeti - open source, fait avec amour 💖</span>
       <span>
         <a href="https://github.com/DemeulemeesterxMaxime/confetti" target="_blank" rel="noopener">GitHub</a>
         &nbsp;·&nbsp;

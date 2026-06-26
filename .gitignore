@@ -5,6 +5,11 @@
 *.ogg
 *.wav
 
+# Variables d'environnement locales
+.env
+.env.local
+.env.*.local
+
 # Outils / build
 node_modules/
 dist/

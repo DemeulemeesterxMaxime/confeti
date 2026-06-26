@@ -10,7 +10,7 @@ export function getStaticPaths() {
 const { tpl } = Astro.props;
 ---
 <Base
-  title={`Personnaliser ${tpl.title} - Confetti`}
+  title={`Personnaliser ${tpl.title} - Confeti`}
   description={`Personnalise le modèle "${tpl.title}" : textes, photos, musique et couleurs. Télécharge un site HTML prêt à offrir en quelques minutes.`}
   active="create"
 >
@@ -148,6 +148,7 @@ const { tpl } = Astro.props;
     k.textContent = label;
     const input = opts.multiline ? document.createElement('textarea') : document.createElement('input');
     if (opts.multiline) input.rows = 2;
+    input.dataset.field = key;
     input.value = edits[key];
     input.addEventListener('input', () => { edits[key] = input.value; scheduleRender(); });
     card.appendChild(k);
@@ -184,6 +185,7 @@ const { tpl } = Astro.props;
         if (keys.indexOf(kk) > -1) {
           const ki = document.createElement('input');
           ki.className = 'k-in';
+          ki.dataset.field = kk;
           ki.value = edits[kk] || '';
           ki.addEventListener('input', () => { edits[kk] = ki.value; scheduleRender(); });
           card.appendChild(ki);
@@ -191,6 +193,7 @@ const { tpl } = Astro.props;
         if (keys.indexOf(lk) > -1) {
           const li = document.createElement('textarea');
           li.className = 'l-in';
+          li.dataset.field = lk;
           li.rows = 2;
           li.value = edits[lk] || '';
           li.addEventListener('input', () => { edits[lk] = li.value; scheduleRender(); });
@@ -421,7 +424,7 @@ const { tpl } = Astro.props;
     const base = (edits['name'] || 'fete').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g, '')
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return 'confetti-' + (base || 'fete') + '.html';
+    return 'confeti-' + (base || 'fete') + '.html';
   }
 
   function download() {
@@ -446,6 +449,20 @@ const { tpl } = Astro.props;
       const txt = await res.text();
       baseDoc = new DOMParser().parseFromString(txt, 'text/html');
       buildForm();
+
+      const aiRaw = sessionStorage.getItem('confeti_ai_content');
+      if (aiRaw) {
+        try {
+          const aiData = JSON.parse(aiRaw);
+          sessionStorage.removeItem('confeti_ai_content');
+          Object.entries(aiData).forEach(([key, value]) => {
+            edits[key] = String(value);
+            const el = document.querySelector('[data-field="' + key + '"]');
+            if (el) el.value = String(value);
+          });
+        } catch (_) {}
+      }
+
       loadingEl.hidden = true;
       formEl.hidden = false;
       render();
