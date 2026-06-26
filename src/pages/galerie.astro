@@ -6,7 +6,11 @@ import { getTemplates } from '../lib/templates.js';
 const templates = getTemplates();
 const cats = Array.from(new Set(templates.map((t) => t.category))).filter(Boolean);
 ---
-<Base title="La galerie - Confetti" active="galerie">
+<Base
+  title="Galerie de modèles d'anniversaire - Confetti"
+  description="Parcours nos modèles de sites d'anniversaire : romantique, festif, enfant... Choisis ton ambiance, personnalise en quelques clics et télécharge un site prêt à offrir."
+  active="galerie"
+>
   <section class="wrap head">
     <h1>La galerie 🎈</h1>
     <p>Des modèles partagés par la communauté. Choisis-en un, personnalise, télécharge.</p>
