@@ -1,9 +1,24 @@
 ---
 const {
-  title = 'Confetti - sites de fete a offrir',
-  description = "Cree et offre un site de fete qui se raconte au scroll : anniversaire, fete des peres/meres, et plus. Photos, mots et musique, un seul fichier a partager.",
+  title = 'Confetti — Crée et offre un site d\'anniversaire unique',
+  description = 'Crée et offre un site d\'anniversaire qui se raconte au scroll : photos, messages et musique assemblés en un seul fichier HTML à partager. Sans coder, 100 % gratuit.',
   active = '',
+  canonical = Astro.url.href,
+  ogImage = 'https://confeti.fun/og-image.svg',
 } = Astro.props;
+
+const siteUrl = 'https://confeti.fun';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Confetti',
+  url: siteUrl,
+  description,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'All',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  inLanguage: 'fr',
+};
 ---
 <!doctype html>
 <html lang="fr">
@@ -12,7 +27,29 @@ const {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23ef5d57'/%3E%3Ctext x='50' y='72' font-size='62' font-family='Nunito,sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
+  <link rel="canonical" href={canonical} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Confetti" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23ef5d57'/%3E%3Ctext x='50' y='72' font-size='62' font-family='Nunito,sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -87,7 +124,7 @@ const {
     <div class="in wrap">
       <span>Confetti - open source, fait avec amour 💖</span>
       <span>
-        <a href="https://github.com/DemeulemeesterxMaxime/birthday-website-template" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/DemeulemeesterxMaxime/confetti" target="_blank" rel="noopener">GitHub</a>
         &nbsp;·&nbsp;
         <a href="/deploy">Héberger</a>
       </span>

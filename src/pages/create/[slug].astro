@@ -9,7 +9,11 @@ export function getStaticPaths() {
 
 const { tpl } = Astro.props;
 ---
-<Base title={`Personnaliser ${tpl.title} - Confetti`} active="create">
+<Base
+  title={`Personnaliser ${tpl.title} - Confetti`}
+  description={`Personnalise le modèle "${tpl.title}" : textes, photos, musique et couleurs. Télécharge un site HTML prêt à offrir en quelques minutes.`}
+  active="create"
+>
   <div class="topbar">
     <div class="wrap topbar-in">
       <div class="bread"><a href="/galerie">Galerie</a><span>/</span><b>{tpl.title}</b></div>
