@@ -2,18 +2,17 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
-  title="Créer un site d'anniversaire par IA - Confetti"
+  title="Créer un site d'anniversaire par IA - Confeti"
   description="Décris la personne et l'occasion : l'IA écrit les textes, compose les scènes et génère un site d'anniversaire prêt à offrir en quelques secondes."
   active="create"
 >
   <section class="wrap composer">
     <div class="left">
-      <span class="pill coral">✨ Génération par IA · bientôt</span>
+      <span class="pill coral">✨ Génération par IA</span>
       <h1>Raconte-moi votre histoire.</h1>
       <p class="lead">
         Décris la personne, l'occasion, vos souvenirs et le ton voulu. L'IA écrira les
-        scènes, choisira l'ambiance et assemblera un site complet. (Fonctionnalité en
-        préparation.)
+        scènes, choisira l'ambiance et assemblera un site complet.
       </p>
 
       <div class="box">
@@ -51,22 +50,19 @@ import Base from '../layouts/Base.astro';
         </label>
       </div>
 
-      <p id="note" class="note" hidden>
-        ✨ La génération par IA arrive bientôt. En attendant,
-        <a href="/galerie">pars d'un modèle existant</a> : tu peux déjà tout
-        personnaliser (textes, photos, musique) et télécharger ton site.
-      </p>
+      <p id="note" class="note" hidden></p>
     </div>
 
     <aside class="aside card">
-      <div class="aside-h">À venir</div>
+      <div class="aside-h">Comment ça marche</div>
       <ul>
-        <li>📝 Scènes écrites pour toi à partir de quelques phrases</li>
-        <li>🎨 Ambiance et couleurs choisies automatiquement</li>
-        <li>🔀 « Remix » : partir d'un modèle et changer l'ambiance</li>
+        <li>📝 Décris la personne en quelques phrases</li>
+        <li>🎨 L'IA écrit les 8 scènes et choisit le ton</li>
+        <li>✏️ Tu affines les textes, ajoutes tes photos</li>
+        <li>⬇️ Tu télécharges un seul fichier à partager</li>
       </ul>
       <a class="btn ghost" href="/galerie">Partir d'un modèle</a>
-      <p class="aside-note">Le personnalisateur est déjà 100% fonctionnel.</p>
+      <p class="aside-note">Tu peux aussi personnaliser directement sans IA.</p>
     </aside>
   </section>
 </Base>
@@ -79,10 +75,41 @@ import Base from '../layouts/Base.astro';
       t.classList.add('on');
     }));
   });
+
   const note = document.getElementById('note');
-  document.getElementById('gen').addEventListener('click', () => {
-    note.hidden = false;
-    note.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const genBtn = document.getElementById('gen');
+
+  genBtn.addEventListener('click', async () => {
+    const promptEl = document.getElementById('prompt');
+    const prompt = promptEl.value.trim();
+    if (!prompt) { promptEl.focus(); return; }
+
+    const tone = document.querySelector('.tags[data-group="tone"] .tag.on')?.textContent || 'Tendre';
+    const selects = document.querySelectorAll('.duo select');
+    const occasion = selects[0]?.value || 'Anniversaire';
+    const langue = selects[1]?.value || 'Français';
+
+    genBtn.disabled = true;
+    genBtn.textContent = 'Génération…';
+    note.hidden = true;
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, tone, occasion, langue }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur inconnue');
+      sessionStorage.setItem('confeti_ai_content', JSON.stringify(data));
+      window.location.href = '/create/romantic-scroll/';
+    } catch (err) {
+      note.textContent = '❌ ' + (err.message || 'Erreur lors de la génération. Réessaie.');
+      note.hidden = false;
+      note.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      genBtn.disabled = false;
+      genBtn.textContent = 'Générer le site →';
+    }
   });
 </script>
 
