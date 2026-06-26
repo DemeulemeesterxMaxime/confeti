@@ -1,5 +1,6 @@
 ---
 import { getLangFromUrl, localizePath, languages, t } from '../i18n/ui';
+import Analytics from '@vercel/analytics/astro';
 
 const lang = getLangFromUrl(Astro.url);
 const tt = t[lang];
@@ -405,5 +406,6 @@ const structuredData = {
       window.addEventListener('load', scalePreviews);
       setTimeout(scalePreviews, 300);
     </script>
+    <Analytics />
   </body>
 </html>
