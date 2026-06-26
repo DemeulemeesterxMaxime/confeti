@@ -19,6 +19,7 @@
   @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-13px);} }
   @keyframes bob    { 0%,100%{transform:translateY(0);} 50%{transform:translateY(9px);} }
   @keyframes rise   { 0%{transform:translateY(0) scale(.7);opacity:0;} 12%{opacity:.85;} 100%{transform:translateY(-118vh) scale(1.15);opacity:0;} }
+  @keyframes dec    { 0%,100%{transform:translateY(0);opacity:.5;} 50%{transform:translateY(-12px);opacity:.95;} }
 
   /* Accessibilité : respect du réglage "Réduire les animations" (iOS & desktop) */
   @media (prefers-reduced-motion: reduce) {
@@ -37,7 +38,7 @@
 </style>
 </head>
 <body>
-<div data-bday-root data-screen-label="Site anniversaire Axelle">
+<div data-bday-root data-decor="stars" data-screen-label="Site anniversaire Axelle">
 
   <!-- BACKGROUND -->
   <div data-bg="#1d3666" style="position:fixed;inset:0;z-index:0;background:radial-gradient(125% 95% at 50% 8%, #1d3666 0%, #122247 36%, #0a1430 74%, #060b1e 100%);"></div>
@@ -220,18 +221,55 @@
   var PARALLAX = 1;      // intensité parallaxe des photos
   var rnd = Math.random;
 
-  // --- Étoiles ---
-  var starsBox = root.querySelector('[data-stars]');
-  for (var i = 0; i < STAR_COUNT; i++) {
-    var s = document.createElement('div');
-    var size = (rnd() * 2.2 + 1).toFixed(2);
-    s.style.cssText =
-      'position:absolute;top:' + (rnd() * 100).toFixed(2) + '%;left:' + (rnd() * 100).toFixed(2) + '%;' +
-      'width:' + size + 'px;height:' + size + 'px;border-radius:50%;' +
-      'background:' + PALETTE[(rnd() * PALETTE.length) | 0] + ';box-shadow:0 0 6px rgba(255,255,255,0.5);' +
-      'animation:tw ' + (rnd() * 3 + 2.4).toFixed(2) + 's ease-in-out ' + (rnd() * 5).toFixed(2) + 's infinite;';
-    starsBox.appendChild(s);
+  // --- Décor d'arrière-plan (selon data-decor : stars | hearts | sparkles | flowers | Confeti | none) ---
+  var DECOR = root.getAttribute('data-decor') || 'stars';
+  var decorBox = root.querySelector('[data-stars]');
+  function decPos() { return 'top:' + (rnd() * 100).toFixed(2) + '%;left:' + (rnd() * 100).toFixed(2) + '%;'; }
+  function decAnim() { return 'animation:dec ' + (rnd() * 4 + 4).toFixed(2) + 's ease-in-out ' + (rnd() * 4).toFixed(2) + 's infinite;'; }
+
+  function addStars() {
+    for (var i = 0; i < STAR_COUNT; i++) {
+      var s = document.createElement('div');
+      var size = (rnd() * 2.2 + 1).toFixed(2);
+      s.style.cssText = 'position:absolute;' + decPos() +
+        'width:' + size + 'px;height:' + size + 'px;border-radius:50%;' +
+        'background:' + PALETTE[(rnd() * PALETTE.length) | 0] + ';box-shadow:0 0 6px rgba(255,255,255,0.5);' +
+        'animation:tw ' + (rnd() * 3 + 2.4).toFixed(2) + 's ease-in-out ' + (rnd() * 5).toFixed(2) + 's infinite;';
+      decorBox.appendChild(s);
+    }
   }
+  function addGlyphs(glyphs, colors) {
+    var N = COARSE ? 16 : 26;
+    for (var i = 0; i < N; i++) {
+      var g = document.createElement('div');
+      g.textContent = glyphs[(rnd() * glyphs.length) | 0];
+      var col = colors ? 'color:' + colors[(rnd() * colors.length) | 0] + ';' : '';
+      g.style.cssText = 'position:absolute;' + decPos() +
+        'font-size:' + (rnd() * 16 + 12).toFixed(0) + 'px;line-height:1;' + col +
+        'will-change:transform,opacity;' + decAnim();
+      decorBox.appendChild(g);
+    }
+  }
+  function addConfeti() {
+    var cols = ['#ef5d57', '#3d9be0', '#f5b13d', '#2bb38a', '#7c5cd6', '#ffffff'];
+    var N = COARSE ? 18 : 30;
+    for (var i = 0; i < N; i++) {
+      var d = document.createElement('div');
+      var sz = (rnd() * 6 + 5).toFixed(0);
+      var radius = rnd() < 0.5 ? '50%' : '2px';
+      d.style.cssText = 'position:absolute;' + decPos() +
+        'width:' + sz + 'px;height:' + sz + 'px;border-radius:' + radius + ';' +
+        'background:' + cols[(rnd() * cols.length) | 0] + ';will-change:transform,opacity;' + decAnim();
+      decorBox.appendChild(d);
+    }
+  }
+
+  if (DECOR === 'hearts') addGlyphs(['♥', '💕', '💖'], ['#ff9bb0', '#ef5d57', '#ffd6e0', '#9cc0ff']);
+  else if (DECOR === 'sparkles') addGlyphs(['✨', '✦', '⋆'], ['#ffffff', '#f2dcb0', '#dbe7ff']);
+  else if (DECOR === 'flowers') addGlyphs(['🌸', '🌼', '❀', '✿'], null);
+  else if (DECOR === 'Confeti') addConfeti();
+  else if (DECOR === 'none') { /* aucun décor */ }
+  else addStars();
 
   // --- Cœurs (finale) ---
   var heartsBox = root.querySelector('[data-hearts]');

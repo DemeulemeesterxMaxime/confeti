@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { getTemplates } from '../../lib/templates.js';
 import { MASCOTS, DEFAULT_MASCOT } from '../../lib/mascots.js';
+import { DECORS, DEFAULT_DECOR } from '../../lib/decors.js';
 
 export function getStaticPaths() {
   return getTemplates().map((t) => ({ params: { slug: t.slug }, props: { tpl: t } }));
@@ -66,6 +67,11 @@ const { tpl } = Astro.props;
           <div id="bgControls" class="bg-controls"></div>
         </div>
 
+        <div class="sec" id="decorSec" hidden>
+          <div class="sec-t">Décor d'arrière-plan</div>
+          <div id="decorControls" class="mascot-grid"></div>
+        </div>
+
         <div class="sec">
           <div class="sec-t">Musique (optionnel)</div>
           <label class="drop" id="musicLabel" for="music">♪ Déposer un .mp3</label>
@@ -81,7 +87,7 @@ const { tpl } = Astro.props;
   </div>
 </Base>
 
-<script define:vars={{ tplUrl: tpl.url, MASCOTS, DEFAULT_MASCOT }}>
+<script define:vars={{ tplUrl: tpl.url, MASCOTS, DEFAULT_MASCOT, DECORS, DEFAULT_DECOR }}>
   const $ = (s) => document.querySelector(s);
   const fieldsEl = $('#fields');
   const slotsEl = $('#slots');
@@ -102,6 +108,7 @@ const { tpl } = Astro.props;
   let slotTotal = 0, slotDone = 0;
   let bgColor = null;          // couleur de fond choisie (null = dégradé d'origine)
   let mascotId = DEFAULT_MASCOT; // mascotte choisie ('panda' = dessin d'origine)
+  let decorId = DEFAULT_DECOR;   // décor d'arrière-plan choisi ('stars' = d'origine)
 
   // Assombrit une couleur hex par un facteur (1 = inchangé, 0 = noir).
   function shade(hex, f) {
@@ -247,6 +254,7 @@ const { tpl } = Astro.props;
 
     buildMascots();
     buildBgControls();
+    buildDecorControls();
 
     $('#music').addEventListener('change', (e) => {
       const f = e.target.files && e.target.files[0];
@@ -365,6 +373,33 @@ const { tpl } = Astro.props;
     $('#bgSec').hidden = false;
   }
 
+  // Décor d'arrière-plan (affiché seulement si la template déclare [data-decor]).
+  function buildDecorControls() {
+    const root = baseDoc.querySelector('[data-decor]');
+    if (!root) return;
+    decorId = root.getAttribute('data-decor') || DEFAULT_DECOR;
+    const wrap = $('#decorControls');
+    DECORS.forEach((d) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'mascot' + (d.id === decorId ? ' is-on' : '');
+      b.setAttribute('aria-pressed', String(d.id === decorId));
+      b.innerHTML = '<span class="m-glyph">' + d.glyph + '</span>'
+        + '<span class="m-lab">' + d.label + '</span>';
+      b.addEventListener('click', () => {
+        decorId = d.id;
+        wrap.querySelectorAll('.mascot').forEach((x) => {
+          const on = x === b;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
+        scheduleRender();
+      });
+      wrap.appendChild(b);
+    });
+    $('#decorSec').hidden = false;
+  }
+
   function buildDoc() {
     const doc = baseDoc.cloneNode(true);
     doc.querySelectorAll('[data-edit]').forEach((el) => {
@@ -389,6 +424,10 @@ const { tpl } = Astro.props;
     }
     if (bgColor) {
       doc.querySelectorAll('[data-bg]').forEach((el) => { el.style.background = bgGradient(bgColor); });
+    }
+    if (decorId) {
+      const r = doc.querySelector('[data-decor]');
+      if (r) r.setAttribute('data-decor', decorId);
     }
     if (mascotId && mascotId !== DEFAULT_MASCOT) {
       const m = MASCOTS.find((x) => x.id === mascotId);
