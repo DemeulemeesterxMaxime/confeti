@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getTemplates } from '../../lib/templates.js';
+import { MASCOTS, DEFAULT_MASCOT } from '../../lib/mascots.js';
 
 export function getStaticPaths() {
   return getTemplates().map((t) => ({ params: { slug: t.slug }, props: { tpl: t } }));
@@ -21,9 +22,18 @@ const { tpl } = Astro.props;
 
   <div class="wrap ed-grid">
     <section class="preview-col">
-      <div class="eyebrow">Aperçu en direct</div>
-      <div class="device"><iframe id="preview" title="Aperçu en direct"></iframe></div>
-      <p class="muted small center">Téléphone · ordinateur · mise à jour en temps réel</p>
+      <div class="preview-head">
+        <div class="eyebrow">Aperçu en direct</div>
+        <div class="seg" role="tablist" aria-label="Mode d'aperçu">
+          <button class="seg-b is-on" id="modePhone" type="button" role="tab" aria-selected="true">📱 Téléphone</button>
+          <button class="seg-b" id="modeDesktop" type="button" role="tab" aria-selected="false">🖥 Ordinateur</button>
+        </div>
+      </div>
+      <div class="stage phone" id="stage">
+        <div class="browser-bar"><span></span><span></span><span></span></div>
+        <div class="screen"><iframe id="preview" title="Aperçu en direct"></iframe></div>
+      </div>
+      <p class="muted small center">Mise à jour en temps réel</p>
     </section>
 
     <aside class="panel card">
@@ -42,6 +52,16 @@ const { tpl } = Astro.props;
           <div id="slots" class="slots"></div>
         </div>
 
+        <div class="sec" id="mascotSec" hidden>
+          <div class="sec-t">Mascotte</div>
+          <div id="mascots" class="mascot-grid"></div>
+        </div>
+
+        <div class="sec" id="bgSec" hidden>
+          <div class="sec-t">Couleur de fond</div>
+          <div id="bgControls" class="bg-controls"></div>
+        </div>
+
         <div class="sec">
           <div class="sec-t">Musique (optionnel)</div>
           <label class="drop" id="musicLabel" for="music">♪ Déposer un .mp3</label>
@@ -57,11 +77,15 @@ const { tpl } = Astro.props;
   </div>
 </Base>
 
-<script define:vars={{ tplUrl: tpl.url }}>
+<script define:vars={{ tplUrl: tpl.url, MASCOTS, DEFAULT_MASCOT }}>
   const $ = (s) => document.querySelector(s);
   const fieldsEl = $('#fields');
   const slotsEl = $('#slots');
   const previewEl = $('#preview');
+
+  // Masque la scroll bar dans l'aperçu uniquement (jamais dans le fichier téléchargé).
+  const NOSCROLL = '<style>html,body{scrollbar-width:none;-ms-overflow-style:none}'
+    + 'html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}</style>';
   const formEl = $('#form');
   const loadingEl = $('#loadingMsg');
   const sizeNote = $('#sizeNote');
@@ -72,6 +96,26 @@ const { tpl } = Astro.props;
   const images = {};
   let musicDataUrl = null;
   let slotTotal = 0, slotDone = 0;
+  let bgColor = null;          // couleur de fond choisie (null = dégradé d'origine)
+  let mascotId = DEFAULT_MASCOT; // mascotte choisie ('panda' = dessin d'origine)
+
+  // Assombrit une couleur hex par un facteur (1 = inchangé, 0 = noir).
+  function shade(hex, f) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+    if (!m) return hex;
+    const n = parseInt(m[1], 16);
+    const r = Math.round(((n >> 16) & 255) * f);
+    const g = Math.round(((n >> 8) & 255) * f);
+    const b = Math.round((n & 255) * f);
+    return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+  }
+
+  // Reconstruit le dégradé "ciel nocturne" à partir d'une couleur de base.
+  function bgGradient(base) {
+    return 'radial-gradient(125% 95% at 50% 8%, ' + shade(base, 1) + ' 0%, '
+      + shade(base, 0.72) + ' 36%, ' + shade(base, 0.45) + ' 74%, '
+      + shade(base, 0.28) + ' 100%)';
+  }
 
   function labelFor(key) {
     if (key === 'opening.eyebrow') return 'Ouverture : sur-titre';
@@ -194,6 +238,9 @@ const { tpl } = Astro.props;
       slotsEl.appendChild(cell);
     });
 
+    buildMascots();
+    buildBgControls();
+
     $('#music').addEventListener('change', (e) => {
       const f = e.target.files && e.target.files[0];
       if (!f) return;
@@ -207,9 +254,109 @@ const { tpl } = Astro.props;
     $('#dl').addEventListener('click', download);
     $('#dl2').addEventListener('click', download);
     $('#openBig').addEventListener('click', openBig);
+
+    // Bascule Téléphone / Ordinateur (un seul aperçu à la fois)
+    const stage = $('#stage'), bPhone = $('#modePhone'), bDesk = $('#modeDesktop');
+    const screen = stage.querySelector('.screen');
+    // Viewports simulés : la template est rendue à ces dimensions puis réduite.
+    const DESK_W = 1280, DESK_H = 800, PHONE_W = 390, PHONE_H = 844;
+
+    // L'iframe est rendu à un vrai viewport (mobile ou desktop) puis mis à
+    // l'échelle pour tenir dans le cadre : mise en page fidèle, en miniature.
+    function fitPreview() {
+      const desktop = stage.classList.contains('desktop');
+      const w = desktop ? DESK_W : PHONE_W, h = desktop ? DESK_H : PHONE_H;
+      const cw = screen.clientWidth;
+      if (!cw) return;
+      const s = cw / w;
+      previewEl.style.transform = 'scale(' + s + ')';
+      screen.style.height = (h * s) + 'px';
+    }
+
+    function setMode(desktop) {
+      stage.classList.toggle('desktop', desktop);
+      stage.classList.toggle('phone', !desktop);
+      bDesk.classList.toggle('is-on', desktop);
+      bPhone.classList.toggle('is-on', !desktop);
+      bDesk.setAttribute('aria-selected', String(desktop));
+      bPhone.setAttribute('aria-selected', String(!desktop));
+      fitPreview();                  // estimation immédiate (pendant la transition)
+      setTimeout(fitPreview, 300);   // recalcul une fois la largeur figée (transition .25s)
+    }
+    bPhone.addEventListener('click', () => setMode(false));
+    bDesk.addEventListener('click', () => setMode(true));
+    // La largeur du cadre change avec une transition : on recale à sa fin.
+    stage.addEventListener('transitionend', (e) => { if (e.propertyName === 'max-width') fitPreview(); });
+    window.addEventListener('resize', fitPreview);
+    fitPreview(); // mise à l'échelle initiale (mode téléphone par défaut)
   }
 
   function updateCount() { if (photoCount) photoCount.textContent = slotDone + ' / ' + slotTotal + ' ajoutées'; }
+
+  // Galerie de mascottes (affichée seulement si la template déclare [data-mascot]).
+  function buildMascots() {
+    if (!baseDoc.querySelector('[data-mascot]')) return;
+    const wrap = $('#mascots');
+    MASCOTS.forEach((m) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'mascot' + (m.id === mascotId ? ' is-on' : '');
+      b.setAttribute('aria-pressed', String(m.id === mascotId));
+      b.innerHTML = '<span class="m-glyph">' + (m.glyph || '🐼') + '</span>'
+        + '<span class="m-lab">' + m.label + '</span>';
+      b.addEventListener('click', () => {
+        mascotId = m.id;
+        wrap.querySelectorAll('.mascot').forEach((x) => {
+          const on = x === b;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
+        scheduleRender();
+      });
+      wrap.appendChild(b);
+    });
+    $('#mascotSec').hidden = false;
+  }
+
+  // Contrôles de couleur de fond (affichés seulement si la template déclare [data-bg]).
+  function buildBgControls() {
+    const bgEl = baseDoc.querySelector('[data-bg]');
+    if (!bgEl) return;
+    const base = bgEl.getAttribute('data-bg') || '#1d3666';
+    bgColor = bgColor || base;
+    const wrap = $('#bgControls');
+    const PRESETS = ['#1d3666', '#3a2350', '#7a2e3a', '#1f4d3a', '#2b2f38', '#5a3a1e'];
+    const swatches = document.createElement('div');
+    swatches.className = 'bg-swatches';
+    const picker = document.createElement('input');
+    picker.type = 'color';
+    picker.className = 'bg-picker';
+    picker.value = bgColor;
+    function apply(c) {
+      bgColor = c;
+      picker.value = c;
+      swatches.querySelectorAll('.bg-sw').forEach((s) => s.classList.toggle('is-on', s.dataset.c === c));
+      scheduleRender();
+    }
+    PRESETS.forEach((c) => {
+      const s = document.createElement('button');
+      s.type = 'button';
+      s.className = 'bg-sw' + (c === bgColor ? ' is-on' : '');
+      s.dataset.c = c;
+      s.style.background = bgGradient(c);
+      s.title = c;
+      s.addEventListener('click', () => apply(c));
+      swatches.appendChild(s);
+    });
+    picker.addEventListener('input', () => apply(picker.value));
+    const row = document.createElement('label');
+    row.className = 'bg-pickrow';
+    row.appendChild(Object.assign(document.createElement('span'), { textContent: 'Couleur personnalisée' }));
+    row.appendChild(picker);
+    wrap.appendChild(swatches);
+    wrap.appendChild(row);
+    $('#bgSec').hidden = false;
+  }
 
   function buildDoc() {
     const doc = baseDoc.cloneNode(true);
@@ -233,6 +380,20 @@ const { tpl } = Astro.props;
       const audio = doc.querySelector('[data-audio]');
       if (audio) audio.setAttribute('src', musicDataUrl);
     }
+    if (bgColor) {
+      doc.querySelectorAll('[data-bg]').forEach((el) => { el.style.background = bgGradient(bgColor); });
+    }
+    if (mascotId && mascotId !== DEFAULT_MASCOT) {
+      const m = MASCOTS.find((x) => x.id === mascotId);
+      if (m && m.glyph) {
+        doc.querySelectorAll('[data-mascot]').forEach((el) => {
+          const size = parseInt(el.getAttribute('data-mascot-size') || '120', 10);
+          el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;'
+            + 'width:100%;height:100%;font-size:' + Math.round(size * 0.82) + 'px;line-height:1;">'
+            + m.glyph + '</div>';
+        });
+      }
+    }
     return doc;
   }
 
@@ -243,7 +404,10 @@ const { tpl } = Astro.props;
 
   function render() {
     const html = serialize(buildDoc());
-    previewEl.srcdoc = html;
+    const previewHtml = html.includes('</head>')
+      ? html.replace('</head>', NOSCROLL + '</head>')
+      : NOSCROLL + html;
+    previewEl.srcdoc = previewHtml;
     const mo = new Blob([html]).size / 1e6;
     sizeNote.textContent = 'Fichier estimé : ' + mo.toFixed(mo < 1 ? 2 : 1) + ' Mo'
       + (musicDataUrl ? ' (musique incluse)' : '');
@@ -300,8 +464,36 @@ const { tpl } = Astro.props;
   .ed-grid { display:grid; grid-template-columns:minmax(0,1fr) 410px; gap:28px; padding:24px; align-items:start; }
   .preview-col { position:sticky; top:140px; }
   .eyebrow { font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-bottom:12px; }
-  .device { border-radius:22px; overflow:hidden; background:#0a1430; border:1px solid var(--line); box-shadow:0 26px 54px rgba(120,90,60,.16); padding:9px; }
-  .device iframe { display:block; width:100%; height:660px; border:0; border-radius:16px; background:#0a1430; }
+  /* En-tête aperçu : titre + bascule */
+  .preview-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+  .preview-head .eyebrow { margin-bottom:0; }
+  .seg { display:inline-flex; padding:3px; gap:2px; background:var(--cream); border:1px solid var(--line); border-radius:10px; }
+  .seg-b { border:0; background:transparent; cursor:pointer; padding:6px 12px; border-radius:8px; font:inherit; font-weight:700; font-size:12px; color:var(--faint); transition:background .15s, color .15s; }
+  .seg-b.is-on { background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgba(120,90,60,.12); }
+
+  /* Cadre d'aperçu : un seul iframe, deux formes selon le mode */
+  .stage { margin:0 auto; overflow:hidden; background:#0a1430; box-shadow:0 26px 54px rgba(120,90,60,.16); transition:max-width .25s ease, border-radius .25s ease, padding .25s ease; }
+  .stage .screen { overflow:hidden; background:#0a1430; }
+  .stage iframe { display:block; border:0; background:#0a1430; transform-origin:top left; }
+  .stage .browser-bar { height:26px; background:#f4ece0; display:flex; align-items:center; gap:6px; padding:0 11px; }
+  .stage .browser-bar span { width:8px; height:8px; border-radius:50%; }
+  .stage .browser-bar span:nth-child(1) { background:#ff5f57; }
+  .stage .browser-bar span:nth-child(2) { background:#febc2e; }
+  .stage .browser-bar span:nth-child(3) { background:#28c840; }
+
+  /* Les deux modes rendent la template à un vrai viewport puis la réduisent
+     par transform:scale (cf. fitPreview), pour une mise en page fidèle. */
+
+  /* Mode téléphone : cadre sombre arrondi, viewport mobile 390px */
+  .stage.phone { max-width:248px; border-radius:38px; padding:9px; border:1px solid rgba(255,255,255,.13); }
+  .stage.phone .browser-bar { display:none; }
+  .stage.phone .screen { border-radius:30px; }
+  .stage.phone iframe { width:390px; height:844px; }
+
+  /* Mode ordinateur : fenêtre navigateur, viewport desktop 1280px */
+  .stage.desktop { max-width:760px; border-radius:12px; padding:0; border:1px solid var(--line); box-shadow:0 16px 36px rgba(120,90,60,.1); }
+  .stage.desktop .screen { width:100%; }
+  .stage.desktop iframe { width:1280px; height:800px; }
   .center { text-align:center; }
   .small { font-size:12px; }
   .muted { color:var(--faint); }
@@ -312,20 +504,8 @@ const { tpl } = Astro.props;
   .panel-h .pill { text-decoration:none; }
   .loading { color:var(--faint); }
 
-  .sub-t { font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin:18px 0 9px; }
-  .sub-t:first-child { margin-top:4px; }
-
-  /* Carte champ (style maquette) */
-  .fld { background:var(--cream); border:1.5px solid var(--line); border-radius:11px; padding:10px 13px; margin-bottom:8px; transition:border-color .15s, box-shadow .15s; }
-  .fld:focus-within { border-color:var(--coral); box-shadow:0 0 0 3px rgba(239,93,87,.12); }
-  .fld-k { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:5px; }
-  .fld input, .fld textarea { width:100%; border:0; background:transparent; padding:0; margin:0; font:inherit; color:var(--ink); resize:vertical; }
-  .fld input:focus, .fld textarea:focus { outline:none; }
-  .fld.name input { font-weight:800; font-size:16px; }
-
-  /* Carte scene : kicker coral editable + message serif italique */
-  .fld.scene .k-in { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:6px; }
-  .fld.scene .l-in { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:15px; line-height:1.3; color:var(--ink); }
+  /* Champs générés en JS : voir le bloc <style is:global> plus bas
+     (le style scoped d'Astro ne s'applique pas aux éléments createElement). */
 
   .sec { padding:16px 0 0; margin-top:16px; border-top:1px solid var(--line); }
   .sec-h { display:flex; align-items:center; justify-content:space-between; }
@@ -334,10 +514,6 @@ const { tpl } = Astro.props;
   .count { font-weight:700; font-size:11px; color:var(--faint); }
 
   .slots { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; }
-  .slot { cursor:pointer; }
-  .thumb { aspect-ratio:3/4; border-radius:9px; border:1.5px dashed var(--line); display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:20px; font-weight:700; background-size:cover; background-position:center; transition:border-color .15s; }
-  .slot:hover .thumb { border-color:var(--coral); color:var(--coral); }
-  .thumb.filled { border:1.5px solid var(--line); }
 
   .drop { display:block; text-align:center; border-radius:11px; border:1.5px dashed var(--line); background:var(--cream); padding:13px; font-weight:700; font-size:13px; color:var(--faint); cursor:pointer; transition:border-color .15s, color .15s; }
   .drop:hover { border-color:var(--coral); color:var(--coral); }
@@ -348,7 +524,55 @@ const { tpl } = Astro.props;
   @media (max-width:900px) {
     .ed-grid { grid-template-columns:1fr; }
     .preview-col { position:static; order:-1; }
-    .device iframe { height:520px; }
     .topbar { position:static; }
   }
+</style>
+
+<!-- Champs construits en JS : non scopés par Astro, donc stylés en global
+     et ancrés sur .ed-grid pour rester confinés à cet écran. -->
+<style is:global>
+  .ed-grid .sub-t { font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin:18px 0 9px; }
+  .ed-grid .sub-t:first-child { margin-top:4px; }
+
+  /* Carte champ (style maquette) */
+  .ed-grid .fld { background:var(--cream); border:1.5px solid var(--line); border-radius:11px; padding:11px 14px; margin-bottom:8px; transition:border-color .15s, box-shadow .15s; }
+  .ed-grid .fld:focus-within { border-color:var(--coral); box-shadow:0 0 0 3px rgba(239,93,87,.12); }
+  .ed-grid .fld-k { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:6px; }
+  .ed-grid .fld input,
+  .ed-grid .fld textarea { display:block; box-sizing:border-box; width:100%; border:0; background:transparent; padding:0; margin:0; font:inherit; font-size:14px; line-height:1.45; color:var(--ink); }
+  .ed-grid .fld textarea { resize:vertical; min-height:42px; }
+  .ed-grid .fld input:focus,
+  .ed-grid .fld textarea:focus { outline:none; }
+  .ed-grid .fld.name input { font-weight:800; font-size:16px; }
+
+  /* Carte scène : kicker coral éditable + message serif italique */
+  .ed-grid .fld.scene { display:flex; flex-direction:column; }
+  .ed-grid .fld.scene .k-in { font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); margin-bottom:6px; }
+  .ed-grid .fld.scene .l-in { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:16px; line-height:1.35; color:var(--ink); }
+
+  /* Scrollbar fine pour les textarea qui débordent */
+  .ed-grid .fld textarea { scrollbar-width:thin; scrollbar-color:var(--line) transparent; }
+  .ed-grid .fld textarea::-webkit-scrollbar { width:8px; }
+  .ed-grid .fld textarea::-webkit-scrollbar-thumb { background:var(--line); border-radius:8px; }
+
+  /* Vignettes photos */
+  .ed-grid .slot { cursor:pointer; }
+  .ed-grid .thumb { aspect-ratio:3/4; border-radius:9px; border:1.5px dashed var(--line); display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:20px; font-weight:700; background-size:cover; background-position:center; transition:border-color .15s; }
+  .ed-grid .slot:hover .thumb { border-color:var(--coral); color:var(--coral); }
+  .ed-grid .thumb.filled { border:1.5px solid var(--line); }
+
+  /* Galerie de mascottes */
+  .ed-grid .mascot-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .ed-grid .mascot { display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:8px 4px; border-radius:10px; border:1.5px solid var(--line); background:var(--cream); transition:border-color .15s, box-shadow .15s; }
+  .ed-grid .mascot:hover { border-color:var(--coral); }
+  .ed-grid .mascot.is-on { border-color:var(--coral); box-shadow:0 0 0 3px rgba(239,93,87,.12); }
+  .ed-grid .mascot .m-glyph { font-size:26px; line-height:1; }
+  .ed-grid .mascot .m-lab { font-weight:700; font-size:10px; color:var(--faint); }
+
+  /* Couleur de fond */
+  .ed-grid .bg-swatches { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+  .ed-grid .bg-sw { aspect-ratio:1; border-radius:9px; border:2px solid transparent; box-shadow:0 0 0 1.5px var(--line); cursor:pointer; padding:0; transition:box-shadow .15s; }
+  .ed-grid .bg-sw.is-on { border-color:#fff; box-shadow:0 0 0 2px var(--coral); }
+  .ed-grid .bg-pickrow { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; font-weight:700; font-size:12px; color:var(--faint); }
+  .ed-grid .bg-pickrow .bg-picker { width:46px; height:30px; border:1.5px solid var(--line); border-radius:8px; background:none; cursor:pointer; padding:2px; }
 </style>
