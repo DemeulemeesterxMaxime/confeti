@@ -1,6 +1,9 @@
 ---
 import { getLangFromUrl, localizePath, languages, t } from '../i18n/ui';
-import Analytics from '@vercel/analytics/astro';
+// Le paquet @vercel/analytics/astro expose un type mal resolu par `astro check`
+// (pas de index.d.ts dedie), d'ou le cast pour eviter l'erreur ts(2604).
+import AnalyticsComponent from '@vercel/analytics/astro';
+const Analytics = AnalyticsComponent as any;
 
 const lang = getLangFromUrl(Astro.url);
 const tt = t[lang];
