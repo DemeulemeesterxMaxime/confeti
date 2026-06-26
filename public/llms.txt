@@ -1,0 +1,24 @@
+# Confeti
+
+> Confeti est un service web gratuit et open source pour créer un site d'anniversaire (et autres occasions : fête des mères/pères, félicitations) à offrir, sans coder. On choisit un modèle, on personnalise les textes, photos et la musique dans le navigateur, et on télécharge un seul fichier HTML autonome prêt à partager.
+
+Points clés :
+
+- 100 % gratuit, sans inscription, sans compte.
+- Le résultat est un fichier HTML unique : photos et musique intégrées, fonctionne hors-ligne, se partage par lien, SMS ou email.
+- Site qui se raconte au scroll (scroll narratif) : photos, messages et musique assemblés en une histoire.
+- Compatible iPhone (Safari iOS) et ordinateur.
+- Projet open source (licence MIT), modèles partagés par la communauté.
+
+## Pages
+
+- [Accueil](https://confeti.fun/) : présentation du produit, comment offrir un site en quelques minutes, FAQ.
+- [Galerie](https://confeti.fun/galerie) : catalogue de modèles de sites d'anniversaire (romantique, festif, enfant...) à parcourir, filtrer et personnaliser.
+- [Créer par IA](https://confeti.fun/create) : décrire la personne et l'occasion pour que l'IA écrive les textes et compose les scènes.
+- [Déployer](https://confeti.fun/deploy) : guide pour mettre le site en ligne gratuitement (Vercel, Netlify Drop, GitHub Pages) ou le partager en fichier.
+
+## Ressources
+
+- [Dépôt GitHub](https://github.com/DemeulemeesterxMaxime/Confeti) : code source, README, licence MIT.
+- [Guide IA (AGENT.md)](https://github.com/DemeulemeesterxMaxime/Confeti/blob/main/AGENT.md) : convention des modèles, marqueurs `data-edit` (textes) et `data-slot` (photos), règles de compatibilité iOS.
+- [Contribuer (CONTRIBUTING.md)](https://github.com/DemeulemeesterxMaxime/Confeti/blob/main/CONTRIBUTING.md) : comment proposer un nouveau modèle via une branche `template/...`.

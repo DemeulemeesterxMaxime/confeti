@@ -1,0 +1,197 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getLangFromUrl, t } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const d = t[lang].deploy;
+
+const repo = 'https://github.com/DemeulemeesterxMaxime/Confeti';
+const deployBtn = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(repo)}`;
+---
+
+<Base title={d.title} description={d.description} active="deploy">
+  <section class="wrap head">
+    <span class="pill green">{d.pill}</span>
+    <h1>{d.h1}</h1>
+    <p set:html={d.intro} />
+  </section>
+
+  <section class="wrap cols">
+    <div class="card pad">
+      <div class="ct"><h2>Netlify Drop</h2><span class="pill green">{d.netlifyPill}</span></div>
+      <p class="muted">{d.netlifyDesc}</p>
+      <a class="drop" href="https://app.netlify.com/drop" target="_blank" rel="noopener">
+        <div class="drop-t">{d.netlifyBtn}</div>
+        <div class="drop-d">{d.netlifyBtnSub}</div>
+      </a>
+      <ol class="steps green">
+        {
+          d.netlifySteps.map((s, i) => (
+            <li>
+              <span>{i + 1}</span> <span set:html={s} />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="card pad">
+      <div class="ct"><h2>Vercel</h2><span class="pill blue">{d.vercelPill}</span></div>
+      <p class="muted">{d.vercelDesc}</p>
+      <a class="btn dark big" href={deployBtn} target="_blank" rel="noopener">▲ Deploy to Vercel</a>
+      <ol class="steps blue">
+        {
+          d.vercelSteps.map((s, i) => (
+            <li>
+              <span>{i + 1}</span> <span set:html={s} />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <p class="wrap tip">{d.tip}</p>
+
+  <section class="wrap add">
+    <h3>{d.addTitle}</h3>
+    <p class="muted">
+      <span set:html={d.addBody} />
+      <a href={`${repo}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener"
+        >CONTRIBUTING.md</a
+      >. <span set:html={d.addBodyAfter} />
+    </p>
+  </section>
+</Base>
+
+<style>
+  .head {
+    text-align: center;
+    padding: 42px 24px 20px;
+  }
+  .head h1 {
+    font-size: clamp(30px, 4.6vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 16px 0 10px;
+  }
+  .head p {
+    color: var(--muted);
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 16px;
+  }
+  code {
+    background: var(--cream2);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    color: var(--ink);
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .pad {
+    padding: 28px;
+  }
+  .ct {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .ct h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+  }
+  .muted {
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .drop {
+    display: block;
+    text-align: center;
+    border-radius: 14px;
+    border: 2px dashed var(--green);
+    background: #f4fbf7;
+    padding: 24px;
+    margin: 8px 0 4px;
+  }
+  .drop-t {
+    font-weight: 800;
+  }
+  .drop-d {
+    color: var(--faint);
+    font-size: 13px;
+    margin-top: 5px;
+  }
+  .btn.big {
+    width: 100%;
+    padding: 16px;
+    margin: 8px 0 4px;
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .steps li span:first-child {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .steps.green li span:first-child {
+    background: var(--green);
+  }
+  .steps.blue li span:first-child {
+    background: var(--blue);
+  }
+  .steps b {
+    color: var(--ink);
+  }
+  .tip {
+    text-align: center;
+    color: var(--faint);
+    font-size: 13px;
+    padding: 24px;
+  }
+  .add {
+    padding: 6px 24px 10px;
+  }
+  .add h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 6px;
+  }
+  .add a {
+    color: var(--coral);
+    font-weight: 700;
+  }
+
+  @media (max-width: 760px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

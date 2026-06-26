@@ -6,5 +6,15 @@ export default defineConfig({
   site: 'https://confeti.fun',
   adapter: vercel(),
   build: { format: 'directory' },
-  integrations: [sitemap()],
+  // FR par defaut (sans prefixe), EN sous /en/.
+  i18n: {
+    defaultLocale: 'fr',
+    locales: ['fr', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
+  integrations: [
+    sitemap({
+      i18n: { defaultLocale: 'fr', locales: { fr: 'fr-FR', en: 'en-US' } },
+    }),
+  ],
 });

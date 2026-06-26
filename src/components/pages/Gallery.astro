@@ -1,0 +1,193 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../Card.astro';
+import { getTemplates } from '../../lib/templates.js';
+import { getLangFromUrl, localizePath, t } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const g = t[lang].gallery;
+
+const templates = getTemplates();
+const cats = Array.from(new Set(templates.map((tpl) => tpl.category))).filter(Boolean);
+
+const siteUrl = 'https://confeti.fun';
+const galleryPath = localizePath('/galerie', lang);
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    name: g.collectionName,
+    url: `${siteUrl}${galleryPath}`,
+    description: g.collectionDesc,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: templates.length,
+      itemListElement: templates.map((tpl, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: tpl.title,
+        url: `${siteUrl}${tpl.editUrl}`,
+      })),
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Confeti',
+        item: `${siteUrl}${localizePath('/', lang)}`,
+      },
+      { '@type': 'ListItem', position: 2, name: g.h1, item: `${siteUrl}${galleryPath}` },
+    ],
+  },
+];
+---
+
+<Base title={g.title} description={g.description} active="galerie" jsonLd={jsonLd}>
+  <section class="wrap head">
+    <h1>{g.h1}</h1>
+    <p>{g.intro}</p>
+    <div class="filters">
+      <button class="chip on" data-cat="*">{g.all}</button>
+      {
+        cats.map((c) => (
+          <button class="chip" data-cat={c}>
+            {c}
+          </button>
+        ))
+      }
+      <input id="q" class="search" type="search" placeholder={g.searchPlaceholder} />
+    </div>
+  </section>
+
+  <section class="wrap grid">
+    {templates.map((tpl, i) => <Card t={tpl} eager={i < 3} />)}
+
+    <a class="make" href={localizePath('/create', lang)}>
+      <div class="make-t">{g.makeTitle}</div>
+      <div class="make-d">{g.makeDesc}</div>
+      <div class="make-b">
+        <span class="btn primary sm">{g.makeAi}</span>
+        <span class="btn ghost sm">{g.makeFromTpl}</span>
+      </div>
+    </a>
+  </section>
+</Base>
+
+<script>
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  let cat = '*';
+  function apply() {
+    const term = ((q && q.value) || '').trim().toLowerCase();
+    document.querySelectorAll<HTMLElement>('.tcard').forEach((c) => {
+      const okCat = cat === '*' || c.getAttribute('data-cat') === cat;
+      const okTerm = !term || (c.getAttribute('data-name') || '').includes(term);
+      c.style.display = okCat && okTerm ? '' : 'none';
+    });
+  }
+  chips.forEach((ch) =>
+    ch.addEventListener('click', () => {
+      chips.forEach((x) => x.classList.remove('on'));
+      ch.classList.add('on');
+      cat = ch.getAttribute('data-cat');
+      apply();
+    }),
+  );
+  if (q) q.addEventListener('input', apply);
+</script>
+
+<style>
+  .head {
+    padding: 32px 24px 20px;
+  }
+  .head h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0;
+  }
+  .head p {
+    color: var(--muted);
+    margin: 6px 0 0;
+    font-size: 15px;
+  }
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--coral);
+  }
+  .chip.on {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .search {
+    margin-left: auto;
+    width: 240px;
+    max-width: 100%;
+    height: 40px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    padding: 0 16px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .search:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+    padding-bottom: 10px;
+  }
+
+  .make {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px dashed var(--gold);
+    background: #fffdf5;
+    border-radius: 20px;
+    padding: 22px;
+    min-height: 280px;
+  }
+  .make-t {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .make-d {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 6px 0 18px;
+  }
+  .make-b {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .make-b .btn {
+    width: 100%;
+  }
+</style>

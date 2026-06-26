@@ -1,5 +1,8 @@
 ---
-const { t } = Astro.props;
+import { getLangFromUrl, t as dict } from '../i18n/ui';
+
+const { t, eager = false } = Astro.props;
+const c = dict[getLangFromUrl(Astro.url)].card;
 ---
 
 <article
@@ -7,32 +10,32 @@ const { t } = Astro.props;
   data-cat={t.category}
   data-name={(t.title + ' ' + t.description).toLowerCase()}
 >
-  <a class="prev" href={t.editUrl} aria-label={`Personnaliser ${t.title}`}>
+  <a class="prev" href={t.editUrl} aria-label={`${c.customize} ${t.title}`}>
     <iframe
       src={t.url}
       width="1280"
       height="832"
-      loading="lazy"
+      loading={eager ? 'eager' : 'lazy'}
       scrolling="no"
       tabindex="-1"
-      title={`Aperçu ${t.title}`}></iframe>
-    <span class="hover">Personnaliser</span>
+      title={`${c.preview} ${t.title}`}></iframe>
+    <span class="hover">{c.customize}</span>
   </a>
   <div class="row">
     <span class="dot" style={`background:${t.accent}`}></span>
     <h3>{t.title}</h3>
     {
       t.hasMusic && (
-        <span class="mus" title="Musique incluse">
+        <span class="mus" title={c.musicIncluded}>
           ♪
         </span>
       )
     }
   </div>
-  <div class="by">par {t.author}</div>
+  <div class="by">{c.by} {t.author}</div>
   <div class="act">
-    <a class="btn primary sm grow" href={t.editUrl}>Personnaliser</a>
-    <a class="btn soft sm" href={t.url} target="_blank" rel="noopener">Aperçu</a>
+    <a class="btn primary sm grow" href={t.editUrl}>{c.customize}</a>
+    <a class="btn soft sm" href={t.url} target="_blank" rel="noopener">{c.preview}</a>
   </div>
 </article>
 
