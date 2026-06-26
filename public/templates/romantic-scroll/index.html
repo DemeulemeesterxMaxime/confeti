@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Joyeux anniversaire Julia</title>
+<title>Joyeux anniversaire Axelle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -37,10 +37,10 @@
 </style>
 </head>
 <body>
-<div data-bday-root data-screen-label="Site anniversaire Julia">
+<div data-bday-root data-screen-label="Site anniversaire Axelle">
 
   <!-- BACKGROUND -->
-  <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(125% 95% at 50% 8%, #1d3666 0%, #122247 36%, #0a1430 74%, #060b1e 100%);"></div>
+  <div data-bg="#1d3666" style="position:fixed;inset:0;z-index:0;background:radial-gradient(125% 95% at 50% 8%, #1d3666 0%, #122247 36%, #0a1430 74%, #060b1e 100%);"></div>
   <div style="position:fixed;inset:0;z-index:0;background:radial-gradient(48% 38% at 50% 40%, rgba(124,164,238,0.20), transparent 72%);"></div>
 
   <!-- STARS (générées en JS) -->
@@ -51,7 +51,7 @@
 
     <!-- 0 · OUVERTURE -->
     <div data-scene style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:1;will-change:transform,opacity;padding:6vw;">
-      <div style="position:relative;width:150px;height:142px;animation:floaty 5s ease-in-out infinite;">
+      <div data-mascot="panda" data-mascot-size="150" style="position:relative;width:150px;height:142px;animation:floaty 5s ease-in-out infinite;">
         <div style="position:absolute;top:0;left:14px;width:46px;height:46px;border-radius:50%;background:#24262c;"></div>
         <div style="position:absolute;top:0;right:14px;width:46px;height:46px;border-radius:50%;background:#24262c;"></div>
         <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:118px;height:110px;border-radius:50%;background:#fbfbf6;box-shadow:0 12px 34px rgba(0,0,0,0.35);"></div>
@@ -65,7 +65,7 @@
       </div>
       <div style="font-family:'Nunito',sans-serif;letter-spacing:0.42em;text-transform:uppercase;font-size:clamp(11px,1.4vw,14px);color:#e7c89c;margin-top:36px;" data-edit="opening.eyebrow">Aujourd'hui, c'est ton jour</div>
       <div style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(26px,4.4vw,54px);color:#dce8ff;margin-top:10px;" data-edit="opening.title">Joyeux anniversaire</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(72px,15vw,196px);line-height:0.9;color:#fff;margin-top:2px;text-shadow:0 0 46px rgba(140,180,255,0.45);" data-edit="name">Julia</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(72px,15vw,196px);line-height:0.9;color:#fff;margin-top:2px;text-shadow:0 0 46px rgba(140,180,255,0.45);" data-edit="name">Axelle</div>
       <div data-cue style="position:absolute;bottom:5vh;font-family:'Nunito',sans-serif;font-size:12px;letter-spacing:0.22em;color:rgba(207,224,255,0.82);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;">Défile pour ouvrir<span style="font-size:20px;animation:bob 1.8s ease-in-out infinite;">↓</span></div>
     </div>
 
@@ -86,8 +86,8 @@
     <div data-scene style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;will-change:transform,opacity;padding:6vw;">
       <div style="display:flex;align-items:center;gap:clamp(30px,5vw,82px);max-width:1080px;width:100%;justify-content:center;flex-wrap:wrap;">
         <div style="flex:1;min-width:260px;max-width:430px;order:1;">
-          <div class="kicker" data-edit="s2.kicker">Mon petit panda</div>
-          <div class="line" data-edit="s2.line">Tu es mon petit panda : maladroite, toute câline, et terriblement mignonne.</div>
+          <div class="kicker" data-edit="s2.kicker">Mon petit ange</div>
+          <div class="line" data-edit="s2.line">Tu es mon petit ange : maladroite, toute câline, et terriblement mignonne.</div>
         </div>
         <div data-depth="1.5" data-rot="3" class="frame" style="transform:rotate(3deg);order:2;">
           <div class="photo-ph" data-slot="2" style="width:clamp(240px,30vw,360px);height:clamp(300px,38vw,450px);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:3px;color:#8a8576;font-family:'Nunito',sans-serif;font-size:13px;letter-spacing:.05em;padding:0 18px;background:repeating-linear-gradient(45deg,#ece9df,#ece9df 14px,#e4e0d3 14px,#e4e0d3 28px);">Ta photo ici</div>
@@ -172,7 +172,7 @@
     <!-- 9 · FINALE -->
     <div data-scene style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;will-change:transform,opacity;padding:6vw;overflow:hidden;">
       <div data-hearts style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
-      <div style="position:relative;width:104px;height:99px;animation:floaty 5s ease-in-out infinite;">
+      <div data-mascot="panda" data-mascot-size="104" style="position:relative;width:104px;height:99px;animation:floaty 5s ease-in-out infinite;">
         <div style="position:absolute;top:0;left:10px;width:32px;height:32px;border-radius:50%;background:#24262c;"></div>
         <div style="position:absolute;top:0;right:10px;width:32px;height:32px;border-radius:50%;background:#24262c;"></div>
         <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:82px;height:76px;border-radius:50%;background:#fbfbf6;box-shadow:0 10px 26px rgba(0,0,0,0.35);"></div>
