@@ -1,0 +1,7 @@
+{
+  // Échoue la CI si une vulnérabilité de niveau "high" ou "critical" apparaît.
+  // Astro 6.4.8 corrige les XSS précédentes ; path-to-regexp est forcé en 6.3.0
+  // via "overrides" (package.json). Allowlist vide : aucun high/critical toléré.
+  "high": true,
+  "allowlist": []
+}

@@ -1,0 +1,12 @@
+# Configuration Gitleaks - hérite des règles par défaut
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Fichiers d'exemple sans secret réel"
+paths = [
+  '''\.env\.example$''',
+  '''README\.md$''',
+  '''AGENT\.md$''',
+  '''AGENTS\.md$''',
+]

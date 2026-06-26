@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.vercel/
+.astro/
+public/templates/
+package-lock.json
+CHANGELOG.md
+audit-ci.jsonc
+*.svg
