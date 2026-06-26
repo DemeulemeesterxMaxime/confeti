@@ -16,7 +16,7 @@
 2. les **modeles** eux-memes, qui restent des **sites autonomes "un seul fichier"**
    (scroll narratif, etoiles, panda, coeurs, musique), compatibles iPhone et ordinateur.
 
-**Demo : https://birthday-website-template-jet.vercel.app/**
+**Site : https://confeti.fun**
 
 ---
 
@@ -119,6 +119,12 @@ sortie `dist/`). Aucun `vercel.json` necessaire.
 - [`AGENT.md`](AGENT.md) - guide generique (carte du contenu d'un modele, ou modifier
   textes/photos/musique, convention `data-slot`/`data-edit`, regles iOS, verification).
 - [`CLAUDE.md`](CLAUDE.md) - repères pour Claude Code (structure Astro, commandes).
+- [`llms.txt`](https://confeti.fun/llms.txt) / [`llms-full.txt`](https://confeti.fun/llms-full.txt) -
+  resume du site au format llms.txt pour les moteurs de recherche IA et assistants
+  (ChatGPT, Perplexity, Google AI Overviews...).
+
+Le site est disponible en **francais** (par defaut) et en **anglais** (sous `/en/`),
+avec balises `hreflang` et un selecteur de langue dans la navigation.
 
 ---
 

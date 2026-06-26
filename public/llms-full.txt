@@ -1,0 +1,67 @@
+# Confeti — documentation complète pour les LLM
+
+> Confeti (https://confeti.fun) est un service web gratuit et open source pour créer un site d'anniversaire — et d'autres occasions (fête des mères/pères, félicitations, juste pour le dire) — à offrir, sans coder. L'utilisateur choisit un modèle, le personnalise dans le navigateur (textes, photos, musique), puis télécharge un seul fichier HTML autonome prêt à partager. Le site disponible en français (par défaut) et en anglais (sous /en/).
+
+## Ce qu'est Confeti
+
+Confeti est un projet open source en deux parties :
+
+1. Une galerie web (construite avec Astro) pour parcourir des modèles de sites de fête, les personnaliser dans le navigateur et télécharger un fichier HTML unique.
+2. Les modèles eux-mêmes : des sites autonomes « un seul fichier » au scroll narratif (l'histoire défile : photos, messages, musique), compatibles iPhone (Safari iOS) et ordinateur.
+
+Caractéristiques clés :
+
+- 100 % gratuit, sans inscription ni compte.
+- Le résultat est un fichier HTML unique : les photos et la musique sont intégrées (base64), donc il fonctionne hors-ligne et se partage par lien, SMS ou email.
+- Expérience de scroll narratif : le site se raconte au défilement.
+- Compatible mobile (iPhone / Safari iOS) et ordinateur.
+- Licence MIT. Modèles partagés par la communauté.
+
+## Comment offrir un site (sans coder)
+
+1. Ouvrir la galerie, choisir un modèle, cliquer sur « Personnaliser ».
+2. Changer le prénom et les messages, ajouter ses photos (une par cadre) et, si on veut, une musique (mp3).
+3. Cliquer sur « Télécharger le site » : on obtient un seul fichier `.html`.
+4. Le mettre en ligne (voir la page Déployer) ou l'envoyer directement.
+
+Les photos et la musique sont intégrées dans le fichier téléchargé : il fonctionne tout seul, même hors-ligne.
+
+## Mettre le site en ligne (gratuit)
+
+- Le plus simple : Netlify Drop (https://app.netlify.com/drop) — glisser le fichier, obtenir une URL immédiate, sans compte.
+- URL stable : Vercel — mettre le fichier dans un dépôt GitHub, l'importer sur https://vercel.com/new (Framework « Other »), déployer.
+- Le fichier peut aussi être simplement envoyé par message (il marche hors-ligne).
+
+## Génération par IA (page Créer)
+
+La page « Créer par IA » permet de décrire la personne, l'occasion, les souvenirs et le ton voulu. L'IA rédige alors les textes, choisit l'ambiance et compose les scènes du site, que l'on peut ensuite affiner dans le personnalisateur.
+
+## Pages du site
+
+- Accueil (https://confeti.fun/ et /en/) : présentation, fonctionnement, FAQ.
+- Galerie (/galerie et /en/galerie) : catalogue de modèles, filtres par catégorie, recherche.
+- Créer par IA (/create et /en/create) : composeur de site assisté par IA.
+- Déployer (/deploy et /en/deploy) : guide d'hébergement gratuit.
+- Personnalisateur (/create/<slug>/) : éditeur dans le navigateur (textes, photos, musique, couleurs) — interface en français.
+
+## Questions fréquentes
+
+- Confeti est-il gratuit ? Oui, 100 % gratuit et sans inscription.
+- Faut-il savoir coder ? Non, tout se fait dans le navigateur.
+- Comment offrir le site ? On télécharge un fichier HTML unique, qu'on envoie tel quel ou qu'on met en ligne gratuitement pour partager un lien.
+- Les photos sont-elles privées ? Oui : la personnalisation est locale au navigateur, les médias sont intégrés au fichier, rien n'est stocké sur un serveur.
+- Sur quels appareils ça marche ? iPhone (Safari iOS) et ordinateur ; le fichier fonctionne hors-ligne.
+
+## Pour les contributeurs et développeurs
+
+- Stack : Astro 6, déploiement Vercel, Node 22.12+. Galerie dans `src/`, modèles dans `public/templates/<slug>/`.
+- Ajouter un modèle : déposer `public/templates/<slug>/index.html` (requis), `meta.json` et `music.mp3` (optionnels). La galerie scanne le dossier au build.
+- Rendre un modèle personnalisable : marquer les photos avec `data-slot="N"` et les textes avec `data-edit="cle"`.
+- La branche `main` est figée (aucun merge) ; les modèles et variantes se partagent dans des branches `template/...`.
+
+## Ressources
+
+- Dépôt GitHub : https://github.com/DemeulemeesterxMaxime/Confeti
+- Guide IA (AGENT.md) : https://github.com/DemeulemeesterxMaxime/Confeti/blob/main/AGENT.md
+- Contribuer (CONTRIBUTING.md) : https://github.com/DemeulemeesterxMaxime/Confeti/blob/main/CONTRIBUTING.md
+- Résumé court : https://confeti.fun/llms.txt

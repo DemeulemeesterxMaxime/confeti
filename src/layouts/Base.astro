@@ -1,34 +1,75 @@
 ---
+import { getLangFromUrl, localizePath, languages, t } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const tt = t[lang];
+
 const {
   title = "Confeti — Crée et offre un site d'anniversaire unique",
   description = "Crée et offre un site d'anniversaire qui se raconte au scroll : photos, messages et musique assemblés en un seul fichier HTML à partager. Sans coder, 100 % gratuit.",
   active = '',
   canonical = Astro.url.href,
   ogImage = 'https://confeti.fun/og-image.svg',
+  // Graphes JSON-LD additionnels propres a la page (objet ou tableau d'objets).
+  jsonLd = [],
 } = Astro.props;
 
 const siteUrl = 'https://confeti.fun';
-const jsonLd = {
+
+// Liens alternes par langue (hreflang) pour la page courante.
+const frHref = siteUrl + localizePath(Astro.url.pathname, 'fr');
+const enHref = siteUrl + localizePath(Astro.url.pathname, 'en');
+// Chemin de la page courante dans l'autre langue (bouton de bascule).
+const altLang = lang === 'fr' ? 'en' : 'fr';
+const altHref = localizePath(Astro.url.pathname, altLang);
+const ogLocale = lang === 'fr' ? 'fr_FR' : 'en_US';
+
+// Entites de base, communes a toutes les pages : l'organisation editrice et
+// l'application web, reliees par @id pour le graphe de connaissances.
+const baseGraph = [
+  {
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: 'Confeti',
+    url: siteUrl,
+    logo: 'https://confeti.fun/icon.svg',
+  },
+  {
+    '@type': 'WebApplication',
+    '@id': `${siteUrl}/#app`,
+    name: 'Confeti',
+    url: siteUrl,
+    description,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'All',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+    inLanguage: lang,
+    publisher: { '@id': `${siteUrl}/#organization` },
+  },
+];
+
+// Fusionne les graphes de base avec ceux fournis par la page.
+const pageGraph = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: 'Confeti',
-  url: siteUrl,
-  description,
-  applicationCategory: 'UtilitiesApplication',
-  operatingSystem: 'All',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-  inLanguage: 'fr',
+  '@graph': [...baseGraph, ...pageGraph],
 };
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Confeti" />
+    <meta name="theme-color" content="#ef5d57" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr" href={frHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={frHref} />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -39,7 +80,7 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={ogLocale} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -48,13 +89,15 @@ const jsonLd = {
     <meta name="twitter:image" content={ogImage} />
 
     <!-- JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23ef5d57'/%3E%3Ctext x='50' y='72' font-size='62' font-family='Nunito,sans-serif' font-weight='800' fill='white' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E"
     />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -87,6 +130,27 @@ const jsonLd = {
       body {
         margin: 0;
         padding: 0;
+      }
+      /* Scrollbar discrète, dans la charte (Firefox) */
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line) transparent;
+      }
+      /* Scrollbar discrète (Chrome, Edge, Safari) */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 999px;
+        border: 2px solid var(--cream);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--coral);
       }
       body {
         background: var(--cream);
@@ -159,6 +223,19 @@ const jsonLd = {
         color: var(--ink);
       }
       .nav nav a.on {
+        color: var(--ink);
+      }
+      .nav nav a.lang {
+        border: 1.5px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 11px;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+      }
+      .nav nav a.lang:hover {
+        border-color: var(--coral);
         color: var(--ink);
       }
 
@@ -251,7 +328,7 @@ const jsonLd = {
       /* Footer */
       footer.site {
         border-top: 1px solid var(--line);
-        margin-top: 60px;
+        margin-top: 28px;
       }
       footer.site .in {
         display: flex;
@@ -275,12 +352,21 @@ const jsonLd = {
   <body>
     <header class="nav">
       <div class="nav-in wrap">
-        <a class="logo" href="/">Confeti<span class="dot"></span></a>
+        <a class="logo" href={localizePath('/', lang)}>Confeti<span class="dot"></span></a>
         <nav>
-          <a href="/galerie" class={active === 'galerie' ? 'on' : ''}>Galerie</a>
-          <a href="/create" class={active === 'create' ? 'on' : ''}>Créer</a>
-          <a href="/deploy" class={active === 'deploy' ? 'on' : ''}>Déployer</a>
-          <a class="btn dark sm" href="/galerie">Commencer</a>
+          <a href={localizePath('/galerie', lang)} class={active === 'galerie' ? 'on' : ''}
+            >{tt.nav.gallery}</a
+          >
+          <a href={localizePath('/create', lang)} class={active === 'create' ? 'on' : ''}
+            >{tt.nav.create}</a
+          >
+          <a href={localizePath('/deploy', lang)} class={active === 'deploy' ? 'on' : ''}
+            >{tt.nav.deploy}</a
+          >
+          <a class="lang" href={altHref} hreflang={altLang} aria-label={tt.langLabel}
+            >{languages[altLang]}</a
+          >
+          <a class="btn dark sm" href={localizePath('/galerie', lang)}>{tt.nav.start}</a>
         </nav>
       </div>
     </header>
@@ -291,13 +377,13 @@ const jsonLd = {
 
     <footer class="site">
       <div class="in wrap">
-        <span>Confeti - open source, fait avec amour 💖</span>
+        <span>{tt.footer.tagline}</span>
         <span>
           <a href="https://github.com/DemeulemeesterxMaxime/Confeti" target="_blank" rel="noopener"
             >GitHub</a
           >
           &nbsp;·&nbsp;
-          <a href="/deploy">Héberger</a>
+          <a href={localizePath('/deploy', lang)}>{tt.footer.host}</a>
         </span>
       </div>
     </footer>

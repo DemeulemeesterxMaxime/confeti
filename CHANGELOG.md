@@ -3,6 +3,56 @@
 Format inspire de [Keep a Changelog](https://keepachangelog.com/fr/).
 Versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [2.5.0] - 2026-06-26
+
+### Ajoute
+
+- **Version anglaise du site (i18n)** : pages vitrine (Accueil, Galerie, Créer,
+  Déployer + FAQ) disponibles en anglais sous `/en/`, en plus du français par défaut.
+  - Config Astro `i18n` (`defaultLocale: fr`, `locales: [fr, en]`, sans préfixe pour FR).
+  - Dictionnaire central `src/i18n/ui.ts` (contenu FR/EN) + helpers
+    `getLangFromUrl` / `localizePath`.
+  - Pages factorisées en composants bilingues `src/components/pages/`
+    (Home, Gallery, Create, Deploy) pour éviter toute duplication de markup/CSS ;
+    les routes FR (racine) et EN (`src/pages/en/`) sont de simples wrappers.
+  - `Base.astro` : `html lang`, `og:locale` et JSON-LD `inLanguage` dynamiques,
+    balises `hreflang` (fr / en / x-default) réciproques, et **bouton FR/EN** dans la
+    barre de navigation.
+  - Sitemap enrichi des alternates `hreflang` (option `i18n` de `@astrojs/sitemap`).
+  - L'éditeur `/create/<slug>` reste en français (hors périmètre de cette étape).
+- **Favicons PNG multi-tailles** générés depuis `public/icon.svg`
+  (`favicon-32`, `apple-touch-icon` 180, `icon-192`, `icon-512`), référencés dans
+  `Base.astro` et `site.webmanifest`.
+- **`public/llms-full.txt`** : documentation complète du site en un seul fichier pour
+  les LLM (présentation, fonctionnement, pages, FAQ, conventions de contribution).
+
+## [2.4.0] - 2026-06-26
+
+### Ajoute
+
+- **Optimisation SEO et indexation IA** :
+  - `public/llms.txt` (convention llms.txt) : resume du site et liens des pages cles
+    pour les moteurs de recherche IA et assistants (ChatGPT, Perplexity, Google AI
+    Overviews, Claude).
+  - JSON-LD enrichi et extensible par page dans `Base.astro` : `@graph` avec
+    `Organization` + `WebApplication` (relies par `@id`) et prop `jsonLd` pour les
+    graphes propres a chaque page.
+  - Donnees structurees par page : `FAQPage` (accueil), `CollectionPage` + `ItemList`
+    (galerie), `BreadcrumbList` (galerie et personnalisateur).
+  - **Section FAQ visible** sur l'accueil (5 questions/reponses), source unique
+    alimentant aussi le JSON-LD.
+  - `public/robots.txt` : autorisation explicite des principaux robots IA (GPTBot,
+    OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, Bingbot...).
+  - `public/site.webmanifest` + `public/icon.svg` (PWA), `meta theme-color` et
+    `meta author` dans `Base.astro`.
+  - `package.json` : `description`, `keywords`, `homepage`, `repository`, `license`,
+    `author`.
+
+### Modifie
+
+- README : URL du site corrigee vers `https://confeti.fun` (au lieu de l'ancienne
+  URL de demo Vercel) + reference a `llms.txt`.
+
 ## [2.3.0] - 2026-06-26
 
 ### Securite
