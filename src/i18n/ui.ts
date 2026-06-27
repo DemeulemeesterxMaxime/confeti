@@ -41,7 +41,7 @@ export const t = {
       musicIncluded: 'Musique incluse',
     },
     home: {
-      title: "Confeti — Crée un site d'anniversaire à offrir, sans coder",
+      title: "Confeti - Crée un site d'anniversaire à offrir, sans coder",
       description:
         'Choisis un modèle, personnalise les textes et les photos, ajoute une musique : tu repars avec un seul fichier HTML à partager. Gratuit, sans inscription.',
       heroPill: '🎉 Sans coder · 100% gratuit',
@@ -165,7 +165,7 @@ export const t = {
     langLabel: 'Français',
     card: { customize: 'Customise', preview: 'Preview', by: 'by', musicIncluded: 'Music included' },
     home: {
-      title: 'Confeti — Build a birthday website to gift, no coding',
+      title: 'Confeti - Build a birthday website to gift, no coding',
       description:
         'Pick a template, customise the text and photos, add music: you walk away with a single HTML file to share. Free, no sign-up.',
       heroPill: '🎉 No code · 100% free',

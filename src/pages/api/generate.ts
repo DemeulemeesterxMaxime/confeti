@@ -71,7 +71,7 @@ Règles :
 - Occasion : ${occasion || 'Anniversaire'}
 - Kickers < 30 caractères, lignes < 90 caractères
 - Messages personnalisés à la description fournie
-- PAS de markdown, PAS d'explication — JUSTE le JSON`;
+- PAS de markdown, PAS d'explication - JUSTE le JSON`;
 
   const isCloudflare = apiBase.includes('cloudflare.com');
 

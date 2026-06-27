@@ -1,6 +1,6 @@
-# Confeti — documentation complète pour les LLM
+# Confeti - documentation complète pour les LLM
 
-> Confeti (https://confeti.fun) est un service web gratuit et open source pour créer un site d'anniversaire — et d'autres occasions (fête des mères/pères, félicitations, juste pour le dire) — à offrir, sans coder. L'utilisateur choisit un modèle, le personnalise dans le navigateur (textes, photos, musique), puis télécharge un seul fichier HTML autonome prêt à partager. Le site disponible en français (par défaut) et en anglais (sous /en/).
+> Confeti (https://confeti.fun) est un service web gratuit et open source pour créer un site d'anniversaire - et d'autres occasions (fête des mères/pères, félicitations, juste pour le dire) - à offrir, sans coder. L'utilisateur choisit un modèle, le personnalise dans le navigateur (textes, photos, musique), puis télécharge un seul fichier HTML autonome prêt à partager. Le site disponible en français (par défaut) et en anglais (sous /en/).
 
 ## Ce qu'est Confeti
 
@@ -28,8 +28,8 @@ Les photos et la musique sont intégrées dans le fichier téléchargé : il fon
 
 ## Mettre le site en ligne (gratuit)
 
-- Le plus simple : Netlify Drop (https://app.netlify.com/drop) — glisser le fichier, obtenir une URL immédiate, sans compte.
-- URL stable : Vercel — mettre le fichier dans un dépôt GitHub, l'importer sur https://vercel.com/new (Framework « Other »), déployer.
+- Le plus simple : Netlify Drop (https://app.netlify.com/drop) - glisser le fichier, obtenir une URL immédiate, sans compte.
+- URL stable : Vercel - mettre le fichier dans un dépôt GitHub, l'importer sur https://vercel.com/new (Framework « Other »), déployer.
 - Le fichier peut aussi être simplement envoyé par message (il marche hors-ligne).
 
 ## Génération par IA (page Créer)
@@ -42,7 +42,7 @@ La page « Créer par IA » permet de décrire la personne, l'occasion, les souv
 - Galerie (/galerie et /en/galerie) : catalogue de modèles, filtres par catégorie, recherche.
 - Créer par IA (/create et /en/create) : composeur de site assisté par IA.
 - Déployer (/deploy et /en/deploy) : guide d'hébergement gratuit.
-- Personnalisateur (/create/<slug>/) : éditeur dans le navigateur (textes, photos, musique, couleurs) — interface en français.
+- Personnalisateur (/create/<slug>/) : éditeur dans le navigateur (textes, photos, musique, couleurs) - interface en français.
 
 ## Questions fréquentes
 
