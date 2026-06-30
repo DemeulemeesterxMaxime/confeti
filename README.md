@@ -16,7 +16,7 @@
 2. les **modeles** eux-memes, qui restent des **sites autonomes "un seul fichier"**
    (scroll narratif, etoiles, panda, coeurs, musique), compatibles iPhone et ordinateur.
 
-**Site : https://confeti.fun**
+**Site : https://www.confeti.fun**
 
 ---
 
@@ -119,7 +119,7 @@ sortie `dist/`). Aucun `vercel.json` necessaire.
 - [`AGENT.md`](AGENT.md) - guide generique (carte du contenu d'un modele, ou modifier
   textes/photos/musique, convention `data-slot`/`data-edit`, regles iOS, verification).
 - [`CLAUDE.md`](CLAUDE.md) - repères pour Claude Code (structure Astro, commandes).
-- [`llms.txt`](https://confeti.fun/llms.txt) / [`llms-full.txt`](https://confeti.fun/llms-full.txt) -
+- [`llms.txt`](https://www.confeti.fun/llms.txt) / [`llms-full.txt`](https://www.confeti.fun/llms-full.txt) -
   resume du site au format llms.txt pour les moteurs de recherche IA et assistants
   (ChatGPT, Perplexity, Google AI Overviews...).
 

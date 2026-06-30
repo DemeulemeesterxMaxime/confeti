@@ -12,10 +12,10 @@ Points clés :
 
 ## Pages
 
-- [Accueil](https://confeti.fun/) : présentation du produit, comment offrir un site en quelques minutes, FAQ.
-- [Galerie](https://confeti.fun/galerie) : catalogue de modèles de sites d'anniversaire (romantique, festif, enfant...) à parcourir, filtrer et personnaliser.
-- [Créer par IA](https://confeti.fun/create) : décrire la personne et l'occasion pour que l'IA écrive les textes et compose les scènes.
-- [Déployer](https://confeti.fun/deploy) : guide pour mettre le site en ligne gratuitement (Vercel, Netlify Drop, GitHub Pages) ou le partager en fichier.
+- [Accueil](https://www.confeti.fun/) : présentation du produit, comment offrir un site en quelques minutes, FAQ.
+- [Galerie](https://www.confeti.fun/galerie) : catalogue de modèles de sites d'anniversaire (romantique, festif, enfant...) à parcourir, filtrer et personnaliser.
+- [Créer par IA](https://www.confeti.fun/create) : décrire la personne et l'occasion pour que l'IA écrive les textes et compose les scènes.
+- [Déployer](https://www.confeti.fun/deploy) : guide pour mettre le site en ligne gratuitement (Vercel, Netlify Drop, GitHub Pages) ou le partager en fichier.
 
 ## Ressources
 

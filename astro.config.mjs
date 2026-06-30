@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://confeti.fun',
+  site: 'https://www.confeti.fun',
   adapter: vercel(),
   build: { format: 'directory' },
   // FR par defaut (sans prefixe), EN sous /en/.

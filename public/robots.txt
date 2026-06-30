@@ -1,4 +1,4 @@
-# Confeti - https://confeti.fun
+# Confeti - https://www.confeti.fun
 # Tous les robots sont bienvenus (site public, open source).
 
 User-agent: *
@@ -46,4 +46,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://confeti.fun/sitemap-index.xml
+Sitemap: https://www.confeti.fun/sitemap-index.xml
