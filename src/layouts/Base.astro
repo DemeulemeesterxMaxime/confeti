@@ -13,12 +13,12 @@ const {
   description = "Crée et offre un site d'anniversaire qui se raconte au scroll : photos, messages et musique assemblés en un seul fichier HTML à partager. Sans coder, 100 % gratuit.",
   active = '',
   canonical = Astro.url.href,
-  ogImage = 'https://confeti.fun/og-image.svg',
+  ogImage = 'https://www.confeti.fun/og-image.svg',
   // Graphes JSON-LD additionnels propres a la page (objet ou tableau d'objets).
   jsonLd = [],
 } = Astro.props;
 
-const siteUrl = 'https://confeti.fun';
+const siteUrl = 'https://www.confeti.fun';
 
 // Liens alternes par langue (hreflang) pour la page courante.
 const frHref = siteUrl + localizePath(Astro.url.pathname, 'fr');
@@ -36,7 +36,7 @@ const baseGraph = [
     '@id': `${siteUrl}/#organization`,
     name: 'Confeti',
     url: siteUrl,
-    logo: 'https://confeti.fun/icon.svg',
+    logo: 'https://www.confeti.fun/icon.svg',
   },
   {
     '@type': 'WebApplication',
