@@ -242,6 +242,25 @@ const structuredData = {
         border-color: var(--coral);
         color: var(--ink);
       }
+      @media (max-width: 700px) {
+        .nav-in.wrap {
+          gap: 10px;
+          padding-inline: 16px;
+        }
+        .nav nav {
+          gap: 8px;
+        }
+        .nav nav a:not(.lang):not(.btn) {
+          display: none;
+        }
+        .nav nav a.lang {
+          padding: 5px 9px;
+        }
+        .nav nav .btn {
+          padding: 9px 12px;
+          font-size: 12px;
+        }
+      }
 
       /* Buttons */
       .btn {

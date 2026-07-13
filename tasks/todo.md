@@ -1,5 +1,11 @@
 # Todo - Confeti
 
+## Publication du correctif iPhone (2026-07-13)
+
+- [x] Rejouer le patch sur le `main` actuel sans inclure les changements hors périmètre
+- [x] Valider le rendu à 375 et 390 px, les tests, le lint et le build : 20 contrôles sans débordement, 17 tests, lint et build verts
+- [ ] Créer le commit et intégrer le correctif dans `main`
+
 ## Publication README open source (2026-07-13)
 
 - [x] Fusionner avec bypass administrateur la branche documentaire vers `main`, puis supprimer la branche de travail apres verification du commit de merge distant.

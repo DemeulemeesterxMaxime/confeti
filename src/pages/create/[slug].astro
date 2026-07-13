@@ -1088,6 +1088,25 @@ const jsonLd = {
     }
   }
 
+  @media (max-width: 700px) {
+    .topbar-in {
+      height: auto;
+      min-height: 58px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .bread,
+    .acts {
+      width: 100%;
+    }
+    .acts .btn {
+      flex: 1 1 0;
+      padding: 9px 10px;
+      font-size: 12px;
+    }
+  }
+
   @media (min-width: 1280px) {
     /* Quasi plein écran : aperçu large à gauche, panneau d'étapes plus étroit à droite */
     .ed-grid {
