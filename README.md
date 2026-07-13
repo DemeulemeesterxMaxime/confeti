@@ -1,143 +1,123 @@
-# 🎂 Confeti - galerie + personnalisateur de sites de fete (toutes occasions)
+<p align="center">
+  <img src="./public/og-image.svg" alt="Confeti, galerie open source de sites de fete a offrir" width="900" />
+</p>
 
-> Marque **Confeti** (point coral en signature). Anniversaire, fete des meres/peres,
-> felicitations... un site qui se raconte au scroll, a personnaliser et offrir.
+<h1 align="center">Confeti</h1>
 
-> **EN - TL;DR**: An open-source gallery of single-file, scroll-driven birthday
-> websites. Browse a template, add your photos / texts / music right in the browser,
-> download one ready-to-host HTML file, and put it online in 2 minutes. Works great on
-> iPhone (Safari iOS) and desktop. AI-friendly: see [`AGENT.md`](AGENT.md).
+<p align="center">
+  Creez, personnalisez et offrez un site de fete en un seul fichier HTML, sans coder.
+</p>
 
-**Birthday Website Template** est un projet open source en deux parties :
+<p align="center">
+  <a href="https://github.com/DemeulemeesterxMaxime/confeti/actions/workflows/ci.yml"><img src="https://github.com/DemeulemeesterxMaxime/confeti/actions/workflows/ci.yml/badge.svg" alt="Etat de la CI Confeti" /></a>
+  <a href="https://github.com/DemeulemeesterxMaxime/confeti/actions/workflows/lighthouse.yml"><img src="https://img.shields.io/badge/Lighthouse-audite-7c5cd6" alt="Audit Lighthouse sur les pull requests" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-2ea44f" alt="Licence MIT" /></a>
+  <a href="https://www.confeti.fun"><img src="https://img.shields.io/badge/site-confeti.fun-ef5d57" alt="Site Confeti" /></a>
+</p>
 
-1. une **galerie web** (faite avec Astro) pour parcourir des modeles de sites
-   d'anniversaire, les **personnaliser dans le navigateur** (photos, textes, prenom,
-   musique) et **telecharger un fichier HTML unique** pret a offrir ;
-2. les **modeles** eux-memes, qui restent des **sites autonomes "un seul fichier"**
-   (scroll narratif, etoiles, panda, coeurs, musique), compatibles iPhone et ordinateur.
+<p align="center">
+  <a href="#creer-un-cadeau-en-3-etapes">Creer un cadeau</a> ·
+  <a href="#demarrage-rapide">Demarrage rapide</a> ·
+  <a href="#ajouter-un-modele">Ajouter un modele</a> ·
+  <a href="#contribuer">Contribuer</a>
+</p>
 
-**Site : https://www.confeti.fun**
+> **Open-source birthday website templates and celebration page builder.** Confeti est une galerie Astro de sites de fete narratifs a personnaliser dans le navigateur, puis a telecharger sous la forme d un unique fichier HTML autonome.
 
----
+## Creer un cadeau en 3 etapes
 
-## 💝 Pour offrir un site (sans coder)
+1. Parcourez la [galerie](https://www.confeti.fun/galerie/) et choisissez un modele.
+2. Personnalisez les textes, les photos et, si vous le souhaitez, la musique.
+3. Telechargez le resultat : photos et audio sont integres dans un fichier `.html` pret a heberger ou a partager.
 
-1. Ouvre la galerie, choisis un modele, clique **Personnaliser**.
-2. Change le **prenom** et les **messages**, ajoute tes **photos** (une par cadre) et,
-   si tu veux, une **musique** (mp3).
-3. Clique **Telecharger le site** : tu obtiens un seul fichier `.html`.
-4. Mets-le en ligne (voir la page **Deployer** du site, ou la section ci-dessous).
+Le fichier fonctionne seul, meme hors ligne. Il est pense pour Safari iOS comme pour les navigateurs desktop.
 
-> Les photos et la musique sont integrees dans le fichier telecharge : il fonctionne
-> tout seul, meme hors-ligne, et se partage facilement.
+## Ce que contient le projet
 
----
+| Partie                       | Role                                                                                           |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| **Galerie Astro**            | Decouverte des modeles, editeur dans le navigateur et guide de deploiement.                    |
+| **Templates HTML autonomes** | Une page complete par modele, sans build requis pour le fichier offert.                        |
+| **Editeur generique**        | Detecte `data-edit` pour les textes et `data-slot` pour les photos.                            |
+| **Creation IA optionnelle**  | Point de depart pour generer un brief, avec endpoint OpenAI-compatible configure cote serveur. |
 
-## 🚀 Mettre en ligne (gratuit)
+Les cas d usage couvrent les anniversaires, felicitations, fetes des meres ou des peres et toute invitation ou attention personnelle qui merite mieux qu un simple message.
 
-- **Le plus simple** : glisse ton fichier sur [Netlify Drop](https://app.netlify.com/drop) -> URL immediate.
-- **Vercel** (URL stable, auto-deploy) : mets ton fichier dans un depot GitHub, importe-le
-  sur [vercel.com/new](https://vercel.com/new) (Framework = Other), **Deploy**.
+## Demarrage rapide
 
-Details et bouton "Deploy to Vercel" sur la page **/deploy** du site.
-
----
-
-## 🧩 Ajouter un modele a la galerie
-
-Depose un dossier dans **`public/templates/<ton-modele>/`** :
-
-```
-public/templates/mon-modele/
-├─ index.html     # ton site autonome (requis)
-├─ meta.json      # { "title", "description", "author", "accent" }  (optionnel)
-└─ music.mp3      # musique de fond (optionnel, git-ignore par defaut)
-```
-
-La galerie lit automatiquement le dossier au build (rien a declarer ailleurs). Pour que
-ton modele soit **personnalisable** dans la galerie, marque :
-
-- chaque cadre photo avec `data-slot="1"`, `data-slot="2"`, ...
-- chaque texte editable avec `data-edit="cle"` (`name`, `opening.title`, `s1.kicker`,
-  `s1.line`, `finale.title`, ...).
-
-Voir [`AGENT.md`](AGENT.md) (convention complete) et [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
----
-
-## 🛠️ Developpement local
-
-Pre-requis : **Node 22.12+** (exige par Astro 6 ; runtime Vercel ; voir `.nvmrc`).
+Prerequis : Node.js **22.12+** et npm.
 
 ```bash
-npm install
-npm run dev          # http://localhost:4321  (galerie + personnalisateur)
-npm run build        # genere dist/ + .vercel/output (adaptateur Vercel)
-npm run preview      # sert le build
-
-npm test             # tests unitaires (Vitest)
-npm run coverage     # tests + couverture
-npm run lint         # ESLint + astro check (typage)
-npm run format       # verifie le formatage (Prettier)
-npm run format:write # applique le formatage
+git clone https://github.com/DemeulemeesterxMaxime/confeti.git
+cd confeti
+npm ci
+npm run dev
 ```
 
-## ✅ Integration continue (CI/CD)
+Ouvrez ensuite `http://localhost:4321`. Pour valider une contribution :
 
-Le projet est valide automatiquement par **GitHub Actions** (voir `.github/workflows/`) :
-
-| Workflow         | Declencheur                | Role                                                        |
-| ---------------- | -------------------------- | ----------------------------------------------------------- |
-| `ci.yml`         | push / PR                  | ESLint + `astro check`, Prettier, tests + couverture, build |
-| `security.yml`   | push / PR + hebdo          | `audit-ci` (deps) + Gitleaks (secrets)                      |
-| `codeql.yml`     | push / PR main + hebdo     | Analyse statique de securite (SAST)                         |
-| `lighthouse.yml` | PR                         | Audit perf / SEO / accessibilite sur le build               |
-| `deploy.yml`     | PR (preview) / main (prod) | Deploiement Vercel via la CLI                               |
-
-`dependabot.yml` met a jour les dependances npm et les actions chaque semaine.
-
-Le job de deploiement requiert trois **secrets GitHub** : `VERCEL_TOKEN`,
-`VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (ces deux derniers sont dans `.vercel/project.json`).
-
-Structure :
-
-```
-public/templates/<slug>/   # les modeles (servis tels quels + lus au build)
-src/pages/index.astro      # galerie
-src/pages/create/[slug].astro  # personnalisateur (JS client)
-src/pages/deploy.astro     # guide d'hebergement
-src/lib/templates.js       # scan du dossier templates (build-time, fs)
+```bash
+npm run lint
+npm test
+npm run format
+npm run build
 ```
 
-Deploiement : Astro est detecte automatiquement par Vercel (build `astro build`,
-sortie `dist/`). Aucun `vercel.json` necessaire.
+La CI execute lint, tests, couverture et build. Les pull requests recoivent aussi un audit Lighthouse ; les dependances et secrets sont controles par les workflows de securite et CodeQL.
 
----
+## Ajouter un modele
 
-## 🤖 Aide par IA
+Chaque modele est un dossier auto-decouvert au build :
 
-- [`AGENT.md`](AGENT.md) - guide generique (carte du contenu d'un modele, ou modifier
-  textes/photos/musique, convention `data-slot`/`data-edit`, regles iOS, verification).
-- [`CLAUDE.md`](CLAUDE.md) - repères pour Claude Code (structure Astro, commandes).
-- [`llms.txt`](https://www.confeti.fun/llms.txt) / [`llms-full.txt`](https://www.confeti.fun/llms-full.txt) -
-  resume du site au format llms.txt pour les moteurs de recherche IA et assistants
-  (ChatGPT, Perplexity, Google AI Overviews...).
+```text
+public/templates/mon-modele/
+├── index.html  # requis, page autonome
+├── meta.json   # optionnel : titre, description, auteur, accent
+└── music.mp3   # optionnel, non versionne par defaut
+```
 
-Le site est disponible en **francais** (par defaut) et en **anglais** (sous `/en/`),
-avec balises `hreflang` et un selecteur de langue dans la navigation.
+Pour rendre le modele personnalisable dans la galerie :
 
----
+- marquez les photos avec `data-slot="1"`, `data-slot="2"`, etc. ;
+- marquez les textes avec `data-edit="cle"` ;
+- conservez les garde-fous de scroll et de safe area iOS du modele existant.
 
-## 🌱 Contribuer
+Le guide complet se trouve dans [AGENT.md](AGENT.md). Il explique aussi comment conserver un scroll stable sur iPhone et comment verifier le fichier genere.
 
-`main` reste **figee** (aucun merge). Les modeles et variantes se partagent dans des
-**branches** `template/...`. Voir [`CONTRIBUTING.md`](CONTRIBUTING.md).
+## Vie privee et hebergement
 
-> Suite envisagee : enrichir la galerie avec les templates des branches, et un
-> **createur de page propulse par IA**.
+- La personnalisation des textes et photos se fait dans le navigateur.
+- Le fichier final embarque ses medias et ne depend pas de Confeti pour fonctionner.
+- L IA est optionnelle : elle utilise uniquement l endpoint configure par le deployeur.
+- Pour publier le cadeau, glissez le fichier sur Netlify Drop ou hebergez-le sur Vercel, GitHub Pages ou tout hebergement statique.
 
----
+Le site public expose deja `robots.txt`, sitemap, `llms.txt`, donnees structurees, `hreflang` FR/EN et une FAQ visible afin que les moteurs de recherche et assistants IA comprennent clairement le projet.
 
-## 📄 Licence
+## Contribuer
 
-[MIT](LICENSE). Un credit fait plaisir, mais n'est pas obligatoire. ✨
+Confeti est sous licence [MIT](LICENSE). La branche `main` reste la reference stable : les nouveaux templates et variantes se partagent dans une branche `template/<nom-court>` plutot que par merge direct vers `main`.
+
+```bash
+git checkout -b template/ma-variation
+# ajoutez ou adaptez public/templates/ma-variation/
+git commit -m "template: ajoute ma variation"
+git push origin template/ma-variation
+```
+
+Lisez [CONTRIBUTING.md](CONTRIBUTING.md) avant de proposer un modele. N ajoutez jamais de photos personnelles ni de musique sous copyright dans le depot.
+
+## Ressources
+
+- [Galerie Confeti](https://www.confeti.fun/galerie/)
+- [Creer avec IA](https://www.confeti.fun/create/)
+- [Guide de deploiement](https://www.confeti.fun/deploy/)
+- [Documentation pour agents IA](AGENT.md)
+- [Changelog](CHANGELOG.md)
+
+## FAQ
+
+**Faut-il savoir coder ?** Non. La galerie permet de remplacer les textes, photos et musique avant le telechargement.
+
+**Le site cree reste-t-il disponible si Confeti disparait ?** Oui. Le fichier HTML telecharge est autonome et peut etre heberge ou conserve localement.
+
+**Puis-je creer mon propre template ?** Oui. Respectez la structure `public/templates/<slug>/`, les attributs `data-edit` et `data-slot`, ainsi que les contraintes iOS documentees.

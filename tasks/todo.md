@@ -1,5 +1,15 @@
 # Todo - Confeti
 
+## Publication README open source (2026-07-13)
+
+- [x] Fusionner avec bypass administrateur la branche documentaire vers `main`, puis supprimer la branche de travail apres verification du commit de merge distant.
+
+## README GitHub open source et trouvabilite (2026-07-13)
+
+- [x] Auditer les references GitHub, les capacites reelles, les assets et les workflows de Confeti.
+- [x] Recomposer le README autour de la galerie de sites de fete, du flux sans code, d une illustration reelle, de la contribution de templates et de la confidentialite.
+- [x] Corriger les references de workflow obsoletees, verifier liens et Markdown, puis mettre a jour le changelog avant commit et push de la branche documentaire. Preuves : 17 tests passes, lint sans erreur, build Astro/Vercel, liens locaux et diff-check valides.
+
 ## Terminé
 
 ### Migration Astro 5 → 6 (sécurité) (2026-06-26)
