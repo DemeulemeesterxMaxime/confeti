@@ -1,5 +1,9 @@
 # Todo - Confeti
 
+## Publication README open source (2026-07-13)
+
+- [x] Fusionner avec bypass administrateur la branche documentaire vers `main`, puis supprimer la branche de travail apres verification du commit de merge distant.
+
 ## README GitHub open source et trouvabilite (2026-07-13)
 
 - [x] Auditer les references GitHub, les capacites reelles, les assets et les workflows de Confeti.
