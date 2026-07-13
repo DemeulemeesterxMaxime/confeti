@@ -37,9 +37,9 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/vercel": "^10.0.8",
+    "@astrojs/vercel": "^11.0.2",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^6.4.8"
+    "astro": "^7.0.8"
   },
   "overrides": {
     "path-to-regexp@6.1.0": "6.3.0"
