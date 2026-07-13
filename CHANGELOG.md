@@ -3,6 +3,16 @@
 Format inspire de [Keep a Changelog](https://keepachangelog.com/fr/).
 Versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [Unreleased]
+
+### Modifie
+
+- Refonte le README GitHub avec une promesse produit claire, une illustration versionnee,
+  un parcours sans code, les capacites reelles, les garanties de confidentialite et les
+  regles de contribution open source.
+- Retire du README la reference obsolete au workflow de deploiement Vercel supprime et
+  aligne la description de la CI sur les workflows actuellement versionnes.
+
 ## [2.5.0] - 2026-06-26
 
 ### Ajoute
